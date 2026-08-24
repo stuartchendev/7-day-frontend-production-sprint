@@ -37,6 +37,22 @@ describe('DayOnePage search orchestration', () => {
     await advanceTime(MOCK_SEARCH_LATENCY_MS)
   }
 
+  it('renders product results before Signal presentation advances', async () => {
+    const input = setup()
+
+    changeQuery(input, 'payments')
+    await advanceTime(SEARCH_DEBOUNCE_MS)
+
+    expect(screen.getByText('Request started')).toBeInTheDocument()
+
+    await advanceTime(MOCK_SEARCH_LATENCY_MS)
+
+    expect(
+      screen.getByRole('heading', { name: 'Payments, deposits, and receipts' }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Request started')).toBeInTheDocument()
+  })
+
   it('keeps the latest rapid query result and treats abort as normal control flow', async () => {
     const input = setup()
 

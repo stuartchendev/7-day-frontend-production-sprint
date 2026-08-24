@@ -309,3 +309,111 @@ h1 {
     margin-top: 40px;
   }
 }
+
+
+.day-one-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 860px);
+  gap: 48px;
+  width: min(1240px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 40px 0 96px;
+}
+
+.day-one-layout .knowledge-base {
+  width: auto;
+  margin: 0;
+  padding: 24px 0 0;
+}
+
+.signal-panel {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  padding: 22px;
+  border: 1px solid #cfd5cc;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.signal-panel__eyebrow {
+  margin: 0;
+  color: #5d6d62;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.signal-panel h2 {
+  margin: 8px 0 20px;
+  font-size: 1.35rem;
+}
+
+.signal-panel__facts {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.signal-panel__facts > div {
+  display: grid;
+  gap: 3px;
+}
+
+.signal-panel dt {
+  color: #69736c;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.signal-panel dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.signal-panel code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.85em;
+}
+
+.signal-panel__event {
+  min-height: 122px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #cfd5cc;
+}
+
+.signal-panel__event h3 {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+}
+
+.signal-panel__event p {
+  margin: 6px 0 0;
+  color: #59645c;
+}
+
+.signal-panel__event-name {
+  color: #1d251f !important;
+  font-weight: 700;
+}
+
+@media (max-width: 820px) {
+  .day-one-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    width: min(100% - 28px, 860px);
+    padding: 28px 0 72px;
+  }
+
+  .day-one-layout .knowledge-base {
+    padding-top: 0;
+  }
+
+  .signal-panel {
+    position: static;
+  }
+}
