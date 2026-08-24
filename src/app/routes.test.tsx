@@ -1,7 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  RouterProvider,
+  type RouteObject,
+} from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
+import { DayOnePage } from '../days/day-1/DayOnePage'
 import type { SprintDay } from '../days/types'
 import { createSprintRoutes } from './routes'
 
@@ -18,8 +23,12 @@ const dayOne: SprintDay = {
   Component: DayOneDemo,
 }
 
-function renderRoute(path: string, days: SprintDay[] = []) {
-  const router = createMemoryRouter(createSprintRoutes(days), {
+function renderRoute(
+  path: string,
+  days: SprintDay[] = [],
+  inProgressRoutes: RouteObject[] = [],
+) {
+  const router = createMemoryRouter(createSprintRoutes(days, inProgressRoutes), {
     initialEntries: [path],
   })
 
@@ -46,6 +55,20 @@ describe('Sprint routes', () => {
     expect(screen.getByLabelText('1 of 7 demos published')).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Open demo' }))
     expect(screen.getByRole('heading', { name: 'Day 1 demo' })).toBeInTheDocument()
+  })
+
+  it('reaches an in-progress day directly without publishing it on the index', () => {
+    renderRoute('/day-1', [], [
+      {
+        path: '/day-1',
+        element: <DayOnePage />,
+      },
+    ])
+
+    expect(
+      screen.getByRole('heading', { name: 'Workshop Studio Knowledge Base' }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Implementation in progress')).toBeInTheDocument()
   })
 
   it('returns unknown paths to the Sprint Index', async () => {

@@ -3,7 +3,10 @@ import type { SprintDay } from '../days/types'
 import { NotFoundPage } from './NotFoundPage'
 import { SprintIndexPage } from './SprintIndexPage'
 
-export function createSprintRoutes(days: SprintDay[]): RouteObject[] {
+export function createSprintRoutes(
+  days: SprintDay[],
+  inProgressRoutes: RouteObject[] = [],
+): RouteObject[] {
   return [
     {
       path: '/',
@@ -13,6 +16,7 @@ export function createSprintRoutes(days: SprintDay[]): RouteObject[] {
       path: `/${slug}`,
       element: <Component />,
     })),
+    ...inProgressRoutes,
     {
       path: '*',
       element: <NotFoundPage />,
