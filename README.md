@@ -40,6 +40,23 @@ export const sprintDays: SprintDay[] = [
 
 Do not pre-create empty daily pages or shared abstractions without a demonstrated cross-day need.
 
+## Day 1 engineering note
+
+Day 1 makes async search ownership visible. The core rule is: **Every request may
+finish. Only the latest request earns render ownership.**
+
+Valid queries debounce before starting a request. A new query cancels obsolete
+work with `AbortController`, while the reducer independently rejects stale
+successes and failures by request ID. `activeRequestId` identifies the request
+currently allowed to settle; `renderedRequestId` identifies the last accepted
+request whose results remain visible, including while a newer request is loading.
+
+The mock adapter uses deterministic latency so overlapping requests can be tested
+reliably. Signal events explain the lifecycle through a separate presentation
+queue, so observability pacing never delays search execution or result rendering.
+The trade-off is extra observability plumbing, kept deliberately separate from
+product correctness.
+
 ## Day 7 boundary
 
 After Day 6 evidence selection, Day 7 starts on a dedicated integration branch. That branch is development isolation, not a permanent Portfolio or deployment boundary.

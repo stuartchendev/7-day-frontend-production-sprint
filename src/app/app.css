@@ -582,7 +582,7 @@ h1 {
 }
 
 .signal-stage[data-state='resting'] {
-  opacity: 0.64;
+  opacity: 0.74;
 }
 
 .signal-stage[data-state='ready'],
@@ -692,7 +692,7 @@ h1 {
   min-height: 28px;
   margin: 7px 0 0 22px;
   color: #728578;
-  opacity: 0.38;
+  opacity: 0.68;
   transition:
     color 180ms ease,
     opacity 180ms ease;
@@ -764,7 +764,7 @@ h1 {
   border-radius: 10px;
   color: var(--signal-muted);
   background: rgba(23, 35, 28, 0.72);
-  opacity: 0.58;
+  opacity: 0.72;
   transition:
     border-color 180ms ease,
     color 180ms ease,
