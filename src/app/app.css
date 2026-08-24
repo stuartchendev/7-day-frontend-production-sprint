@@ -322,7 +322,7 @@ h1 {
 .day-one-layout .knowledge-base {
   width: auto;
   margin: 0;
-  padding: 48px;
+  padding: 40px 44px;
   border: 1px solid rgba(174, 185, 176, 0.72);
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.72);
@@ -330,9 +330,9 @@ h1 {
 }
 
 .day-one-layout .knowledge-base__header h1 {
-  max-width: 11ch;
-  margin-top: 16px;
-  font-size: clamp(2.8rem, 6vw, 5rem);
+  max-width: 13ch;
+  margin-top: 10px;
+  font-size: clamp(2.35rem, 4.5vw, 3.9rem);
 }
 
 .day-one-layout .knowledge-base__header > p:last-child {
@@ -341,8 +341,8 @@ h1 {
 }
 
 .day-one-layout .knowledge-search {
-  margin-top: 48px;
-  padding-top: 32px;
+  margin-top: 32px;
+  padding-top: 24px;
 }
 
 .day-one-layout .knowledge-search > h2 {
@@ -392,7 +392,7 @@ h1 {
   top: 24px;
   align-self: start;
   max-height: calc(100vh - 48px);
-  padding: 24px;
+  padding: 20px;
   overflow-x: hidden;
   overflow-y: auto;
   border: 1px solid #27372d;
@@ -411,6 +411,14 @@ h1 {
 .signal-panel__header {
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 12px;
+}
+
+.signal-panel__title {
+  min-width: 0;
 }
 
 .signal-panel__eyebrow {
@@ -424,16 +432,16 @@ h1 {
 }
 
 .signal-panel h2 {
-  margin: 8px 0 10px;
-  font-size: 1.55rem;
+  margin: 4px 0 0;
+  font-size: 1.25rem;
   letter-spacing: -0.025em;
 }
 
 .signal-panel__header > p:last-child {
   margin: 0;
   color: var(--signal-muted);
-  font-size: 0.82rem;
-  line-height: 1.55;
+  font-size: 0.7rem;
+  line-height: 1.4;
 }
 
 .signal-panel code {
@@ -450,8 +458,8 @@ h1 {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin-top: 20px;
-  padding: 13px 14px;
+  margin-top: 12px;
+  padding: 9px 11px;
   border: 1px solid var(--signal-line);
   border-radius: 10px;
   background: rgba(23, 35, 28, 0.88);
@@ -509,7 +517,7 @@ h1 {
 .signal-flow {
   position: relative;
   z-index: 1;
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
 .signal-stage {
@@ -791,17 +799,17 @@ h1 {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 5px;
+  gap: 3px;
   min-height: 0;
-  margin-top: 18px;
-  padding: 15px;
+  margin-top: 12px;
+  padding: 9px 11px;
   border: 1px solid #35483b;
   border-radius: 10px;
   background: rgba(11, 19, 14, 0.72);
 }
 
 .signal-panel__event p {
-  margin: 0 0 3px;
+  margin: 0;
   color: #789080;
   font-size: 0.61rem;
   font-weight: 700;
@@ -814,6 +822,25 @@ h1 {
   font-size: 0.8rem;
 }
 
+.signal-panel__event-summary {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 8px;
+}
+
+.signal-panel__event-summary code {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.signal-panel__event-summary small {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
 .signal-panel__event code {
   color: var(--signal-active);
 }
@@ -821,7 +848,7 @@ h1 {
 .signal-panel__event > span {
   color: var(--signal-muted);
   font-size: 0.68rem;
-  line-height: 1.45;
+  line-height: 1.35;
 }
 
 .signal-panel__event small {
@@ -890,17 +917,21 @@ h1 {
   }
 
   .day-one-layout .knowledge-base__header h1 {
-    font-size: clamp(2.45rem, 13vw, 3.7rem);
+    font-size: clamp(2.25rem, 11.5vw, 3.25rem);
   }
 
   .day-one-layout .knowledge-search {
-    margin-top: 36px;
-    padding-top: 26px;
+    margin-top: 28px;
+    padding-top: 22px;
   }
 
   .signal-panel {
     padding: 18px;
     border-radius: 16px;
+  }
+  .signal-panel__header {
+    grid-template-columns: 1fr;
+    gap: 6px;
   }
 
   .signal-branches {

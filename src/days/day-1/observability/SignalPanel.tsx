@@ -111,8 +111,10 @@ export function SignalPanel({ state, currentEvent }: SignalPanelProps) {
   return (
     <aside className="signal-panel" aria-labelledby="signal-panel-title">
       <header className="signal-panel__header">
-        <p className="signal-panel__eyebrow">Async engine · live trace</p>
-        <h2 id="signal-panel-title">Signal flow</h2>
+        <div className="signal-panel__title">
+          <p className="signal-panel__eyebrow">Async engine · live trace</p>
+          <h2 id="signal-panel-title">Signal flow</h2>
+        </div>
         <p>
           Canonical state shows what is true now. The highlighted trace explains
           what just happened.
@@ -221,12 +223,14 @@ export function SignalPanel({ state, currentEvent }: SignalPanelProps) {
           <strong>Waiting for a request</strong>
         ) : (
           <>
-            <strong>{eventLabels[currentEvent.type]}</strong>
-            <code>{currentEvent.requestId}</code>
+            <div className="signal-panel__event-summary">
+              <strong>{eventLabels[currentEvent.type]}</strong>
+              <code>{currentEvent.requestId}</code>
+              {'elapsedMs' in currentEvent && (
+                <small>{Math.round(currentEvent.elapsedMs)} ms</small>
+              )}
+            </div>
             <span>{eventDescriptions[currentEvent.type]}</span>
-            {'elapsedMs' in currentEvent && (
-              <small>{Math.round(currentEvent.elapsedMs)} ms elapsed</small>
-            )}
           </>
         )}
       </section>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer } from 'react'
 import type { SearchEvent } from './searchEvents'
 
-export const SIGNAL_STEP_MS = 900
+export const SIGNAL_STEP_MS = 1500
 
 type SignalQueueState = {
   currentEvent: SearchEvent | null
