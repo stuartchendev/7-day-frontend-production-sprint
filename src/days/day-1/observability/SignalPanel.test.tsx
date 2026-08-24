@@ -22,7 +22,7 @@ function renderPanel(
 
 describe('SignalPanel lifecycle schematic', () => {
   it('shows the in-flight request separately from the current render owner', () => {
-    renderPanel()
+    const { container } = renderPanel()
 
     expect(screen.getByRole('group', { name: 'Request stage' })).toHaveAttribute(
       'data-state',
@@ -33,6 +33,20 @@ describe('SignalPanel lifecycle schematic', () => {
     ).toHaveAttribute('data-state', 'owner')
     expect(screen.getByText('search-4')).toBeInTheDocument()
     expect(screen.getByText('search-3')).toBeInTheDocument()
+    expect(container.querySelector('[data-presented="true"]')).toBeNull()
+  })
+
+  it('assigns request-path motion only to a presented request event', () => {
+    renderPanel(loadingState, {
+      type: 'REQUEST_STARTED',
+      requestId: 'search-4',
+      timestamp: 420,
+    })
+
+    expect(screen.getByRole('group', { name: 'Request stage' })).toHaveAttribute(
+      'data-presented',
+      'true',
+    )
   })
 
   it.each([
@@ -50,6 +64,13 @@ describe('SignalPanel lifecycle schematic', () => {
       'data-state',
       state,
     )
+    expect(screen.getByRole('group', { name: branch })).toHaveAttribute(
+      'data-presented',
+      'true',
+    )
+    expect(
+      screen.getByRole('group', { name: 'Response gate stage' }),
+    ).toHaveAttribute('data-presented', 'true')
   })
 
   it('represents intentional abort as a cancelled request path', () => {
@@ -62,6 +83,10 @@ describe('SignalPanel lifecycle schematic', () => {
     expect(screen.getByLabelText('Abort path')).toHaveAttribute(
       'data-state',
       'aborted',
+    )
+    expect(screen.getByLabelText('Abort path')).toHaveAttribute(
+      'data-presented',
+      'true',
     )
     expect(screen.getByText('Cancelled path')).toBeInTheDocument()
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()

@@ -602,10 +602,16 @@ h1 {
 .signal-stage[data-state='active'] {
   border-color: var(--signal-active);
   background: rgba(30, 55, 39, 0.96);
-  box-shadow:
-    0 0 0 1px rgba(157, 226, 180, 0.14),
-    0 0 22px rgba(118, 217, 154, 0.1);
-  animation: signal-pulse 1.8s ease-in-out infinite;
+  box-shadow: 0 0 0 1px rgba(157, 226, 180, 0.14);
+}
+
+.signal-stage[data-presented='true'] {
+  animation: signal-stage-emphasis 560ms ease-out 1 both;
+}
+
+.signal-connector[data-presented='true']
+  + .signal-stage[data-presented='true'] {
+  animation-delay: 180ms;
 }
 
 .signal-stage[data-state='accepted'],
@@ -687,9 +693,9 @@ h1 {
   background: var(--signal-active);
 }
 
-.signal-connector[data-active='true'] > span {
+.signal-connector[data-presented='true'] > span {
   opacity: 1;
-  animation: signal-travel 900ms linear infinite;
+  animation: signal-travel-once 560ms ease-out 1 both;
 }
 
 .signal-abort-path {
@@ -730,6 +736,10 @@ h1 {
   opacity: 1;
 }
 
+.signal-abort-path[data-presented='true'] {
+  animation: signal-path-emphasis 560ms ease-out 1 both;
+}
+
 .signal-stage--gate {
   border-style: double;
 }
@@ -742,6 +752,10 @@ h1 {
 
 .signal-branch {
   min-width: 0;
+}
+
+.signal-branch--ignored {
+  align-self: end;
 }
 
 .signal-branch__route {
@@ -765,9 +779,9 @@ h1 {
 
 .signal-terminal {
   display: grid;
-  min-height: 100%;
+  min-height: auto;
   gap: 3px;
-  padding: 12px 10px;
+  padding: 9px 8px;
   border: 1px dashed var(--signal-line);
   border-radius: 10px;
   color: var(--signal-muted);
@@ -793,6 +807,20 @@ h1 {
   border-color: var(--signal-ignored);
   color: var(--signal-ignored);
   opacity: 1;
+}
+
+.signal-branch[data-presented='true'] .signal-branch__route {
+  animation: signal-route-reveal 560ms ease-out 1 both;
+  animation-delay: 240ms;
+}
+
+.signal-branch--accepted[data-presented='true'] .signal-stage {
+  animation-delay: 480ms;
+}
+
+.signal-branch--ignored[data-presented='true'] .signal-terminal {
+  animation: signal-path-emphasis 560ms ease-out 1 both;
+  animation-delay: 480ms;
 }
 
 .signal-panel__event {
@@ -856,28 +884,59 @@ h1 {
   font-size: 0.62rem;
 }
 
-@keyframes signal-pulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px rgba(157, 226, 180, 0.12),
-      0 0 16px rgba(118, 217, 154, 0.07);
+@keyframes signal-stage-emphasis {
+  0% {
+    transform: translateY(2px);
+    outline: 0 solid transparent;
   }
 
-  50% {
-    box-shadow:
-      0 0 0 2px rgba(157, 226, 180, 0.2),
-      0 0 26px rgba(118, 217, 154, 0.14);
+  55% {
+    outline: 2px solid currentColor;
+  }
+
+  100% {
+    transform: translateY(0);
+    outline: 0 solid transparent;
   }
 }
 
-@keyframes signal-travel {
+@keyframes signal-travel-once {
   from {
+    opacity: 1;
     transform: translateY(0);
   }
 
   to {
+    opacity: 0;
     transform: translateY(24px);
+  }
+}
+
+@keyframes signal-path-emphasis {
+  0% {
+    filter: brightness(1);
+    transform: translateX(-2px);
+  }
+
+  55% {
+    filter: brightness(1.45);
+  }
+
+  100% {
+    filter: brightness(1);
+    transform: translateX(0);
+  }
+}
+
+@keyframes signal-route-reveal {
+  from {
+    transform: scaleX(0.15);
+    transform-origin: left top;
+  }
+
+  to {
+    transform: scaleX(1);
+    transform-origin: left top;
   }
 }
 
@@ -952,12 +1011,13 @@ h1 {
   .signal-stage,
   .signal-connector > span,
   .signal-abort-path,
+  .signal-branch__route,
   .signal-terminal {
     animation: none;
     transition: none;
   }
 
-  .signal-connector[data-active='true'] > span {
+  .signal-connector[data-presented='true'] > span {
     top: 6px;
   }
 }
