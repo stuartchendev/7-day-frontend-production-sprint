@@ -68,7 +68,9 @@ describe('Sprint routes', () => {
     expect(
       screen.getByRole('heading', { name: 'Workshop Studio Knowledge Base' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('Implementation in progress')).toBeInTheDocument()
+    expect(
+      screen.getByRole('searchbox', { name: 'Search articles' }),
+    ).toBeInTheDocument()
   })
 
   it('returns unknown paths to the Sprint Index', async () => {

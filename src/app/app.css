@@ -183,3 +183,129 @@ h1 {
     gap: 12px;
   }
 }
+
+.knowledge-base {
+  width: min(860px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 64px 0 96px;
+}
+
+.knowledge-base__header {
+  max-width: 720px;
+}
+
+.knowledge-base__header h1 {
+  font-size: clamp(2.75rem, 8vw, 5.75rem);
+}
+
+.knowledge-base__header > p:last-child {
+  max-width: 62ch;
+  color: #4d5850;
+  line-height: 1.7;
+}
+
+.knowledge-search {
+  margin-top: 56px;
+  padding-top: 28px;
+  border-top: 1px solid #cfd5cc;
+}
+
+.knowledge-search > h2,
+.knowledge-results > h2 {
+  margin: 0 0 20px;
+  font-size: 1.1rem;
+}
+
+.knowledge-search label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.knowledge-search input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #aeb9b0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  color: inherit;
+  font: inherit;
+}
+
+.knowledge-search input:focus-visible {
+  outline: 3px solid #1d251f;
+  outline-offset: 3px;
+}
+
+.knowledge-search__hint,
+.knowledge-search__feedback {
+  color: #59645c;
+  line-height: 1.5;
+}
+
+.knowledge-search__hint {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
+.knowledge-search__feedback {
+  min-height: 48px;
+  padding-top: 12px;
+}
+
+.knowledge-search__feedback p {
+  margin: 0;
+}
+
+.knowledge-search__feedback [role='alert'] {
+  color: #8a2d20;
+}
+
+.knowledge-results {
+  margin-top: 24px;
+}
+
+.knowledge-results ul {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.knowledge-card {
+  padding: 22px;
+  border: 1px solid #cfd5cc;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.knowledge-card__category {
+  margin: 0;
+  color: #5d6d62;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.knowledge-card h3 {
+  margin: 10px 0 8px;
+}
+
+.knowledge-card > p:last-child {
+  margin: 0;
+  color: #59645c;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .knowledge-base {
+    width: min(100% - 28px, 860px);
+    padding: 48px 0 72px;
+  }
+
+  .knowledge-search {
+    margin-top: 40px;
+  }
+}
