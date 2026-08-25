@@ -42,20 +42,36 @@ Do not pre-create empty daily pages or shared abstractions without a demonstrate
 
 ## Day 1 engineering note
 
-Day 1 makes async search ownership visible. The core rule is: **Every request may
-finish. Only the latest request earns render ownership.**
+**Workshop Studio Knowledge Base** focuses on one production failure mode: an
+older async search response overwriting newer UI. The governing rule is: **Every
+request may finish. Only the latest request earns render ownership.**
 
-Valid queries debounce before starting a request. A new query cancels obsolete
-work with `AbortController`, while the reducer independently rejects stale
-successes and failures by request ID. `activeRequestId` identifies the request
-currently allowed to settle; `renderedRequestId` identifies the last accepted
-request whose results remain visible, including while a newer request is loading.
+`activeRequestId` names the request currently allowed to settle. It is cleared
+when that request succeeds, fails, or loses ownership. `renderedRequestId` names
+the last accepted response whose results remain visible, including while a newer
+request is loading. These are intentionally different responsibilities.
 
-The mock adapter uses deterministic latency so overlapping requests can be tested
-reliably. Signal events explain the lifecycle through a separate presentation
-queue, so observability pacing never delays search execution or result rendering.
-The trade-off is extra observability plumbing, kept deliberately separate from
-product correctness.
+Valid queries debounce before starting. A new query cancels obsolete work with
+`AbortController`, while the reducer independently rejects stale successes and
+failures by request ID. Cancellation reduces wasted work; the ownership check is
+the correctness boundary that prevents a stale response from replacing newer UI.
+
+The mock adapter uses controlled, deterministic latency to reproduce concurrency
+scenarios reliably. It is a test seam, not a model of query-specific fixed
+latency. The Signal Panel observes accepted, ignored, and aborted lifecycle
+events through a separate presentation queue; it explains behavior but never
+controls search correctness or render timing.
+
+Key trade-offs:
+
+- Request-ID gating and cancellation add coordination state, but provide defense
+  in depth when cancellation is unavailable or loses a race.
+- Keeping the last accepted results visible avoids loading flicker, but requires
+  explicit render ownership so visible data is not confused with active work.
+- Deterministic timing and a separate signal queue improve reproducibility and
+  reviewability at the cost of mock realism and extra observability plumbing.
+
+[Live demo](https://seven-day-frontend-sprint.spu76611.chatgpt.site/day-1)
 
 ## Day 7 boundary
 
