@@ -154,7 +154,8 @@ export function DayTwoPage() {
         <p className="sprint-index__eyebrow">Day 2 · Account settings</p>
         <h1>Profile Sync Workspace</h1>
         <p>
-          See exactly where persisted truth ends and local editing begins.
+          A failed save rolls back neither the draft nor the server truth. Each
+          copy keeps the state it actually owns.
         </p>
       </header>
 
