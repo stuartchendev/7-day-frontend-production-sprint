@@ -1,4 +1,5 @@
 import { DayOnePage } from './day-1/DayOnePage'
+import { DayTwoPage } from './day-2/DayTwoPage'
 import type { SprintDay } from './types'
 
 /**
@@ -13,5 +14,13 @@ export const sprintDays: SprintDay[] = [
     summary: 'A production-minded async search experience.',
     publishedOn: '2026-08-24',
     Component: DayOnePage,
+  },
+  {
+    day: 2,
+    slug: 'day-2',
+    title: 'Profile Sync Workspace',
+    summary: 'A failed save rolls back neither the draft nor the server truth. Each copy keeps the state it actually owns.',
+    publishedOn: '2026-08-24',
+    Component: DayTwoPage,
   },
 ]
