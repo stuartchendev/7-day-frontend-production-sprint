@@ -4,10 +4,12 @@ import { saveProfile } from './sync/ProfileService'
 
 type PersistedProfilePanelProps = {
   profile: Profile
+  changedFields: ChangedFields
 }
 
 type ProfileDraftFormProps = {
   profile: Profile
+  changedFields: ChangedFields
   onFieldChange: (field: keyof Profile, value: string) => void
 }
 
@@ -22,35 +24,53 @@ type SaveStatusPanelProps = {
 
 type SaveStatus = 'idle' | 'saving' | 'error'
 
+type ChangedFields = {
+  displayName: boolean
+  email: boolean
+  bio: boolean
+}
+
 const initialProfile: Profile = {
   displayName: 'Stuart Chen',
   email: 'stuart@example.com',
   bio: 'Frontend engineer building calm, reliable product experiences.',
 }
 
-function PersistedProfilePanel({ profile }: PersistedProfilePanelProps) {
+function PersistedProfilePanel({
+  profile,
+  changedFields,
+}: PersistedProfilePanelProps) {
   return (
     <section
       className="profile-panel profile-panel--persisted"
       aria-labelledby="persisted-profile-title"
     >
-      <p className="profile-panel__stage">Server</p>
+      <p className="profile-panel__stage">Server truth</p>
       <h2 id="persisted-profile-title">Persisted snapshot</h2>
       <p className="profile-panel__description">
-        The latest profile accepted by the server.
+        Read-only reference: the latest profile accepted by the server.
       </p>
 
       <dl className="persisted-profile">
         <div>
-          <dt>Display name</dt>
+          <dt>
+            Display name
+            {changedFields.displayName && <span>Differs from draft</span>}
+          </dt>
           <dd>{profile.displayName}</dd>
         </div>
         <div>
-          <dt>Email</dt>
+          <dt>
+            Email
+            {changedFields.email && <span>Differs from draft</span>}
+          </dt>
           <dd>{profile.email}</dd>
         </div>
         <div>
-          <dt>Bio</dt>
+          <dt>
+            Bio
+            {changedFields.bio && <span>Differs from draft</span>}
+          </dt>
           <dd>{profile.bio}</dd>
         </div>
       </dl>
@@ -58,14 +78,18 @@ function PersistedProfilePanel({ profile }: PersistedProfilePanelProps) {
   )
 }
 
-function ProfileDraftForm({ profile, onFieldChange }: ProfileDraftFormProps) {
+function ProfileDraftForm({
+  profile,
+  changedFields,
+  onFieldChange,
+}: ProfileDraftFormProps) {
   return (
     <section
       className="profile-panel profile-panel--draft"
       aria-labelledby="profile-draft-title"
     >
-      <p className="profile-panel__stage">Draft</p>
-      <h2 id="profile-draft-title">Working copy</h2>
+      <p className="profile-panel__stage">Your edits</p>
+      <h2 id="profile-draft-title">Current draft</h2>
       <p className="profile-panel__description">
         Edits stay local until a future save flow crosses the persistence boundary.
       </p>
@@ -75,7 +99,10 @@ function ProfileDraftForm({ profile, onFieldChange }: ProfileDraftFormProps) {
         onSubmit={(event) => event.preventDefault()}
       >
         <div>
-          <label htmlFor="profile-display-name">Display name</label>
+          <label htmlFor="profile-display-name">
+            Display name
+            {changedFields.displayName && <span>Changed</span>}
+          </label>
           <input
             id="profile-display-name"
             name="displayName"
@@ -87,7 +114,10 @@ function ProfileDraftForm({ profile, onFieldChange }: ProfileDraftFormProps) {
         </div>
 
         <div>
-          <label htmlFor="profile-email">Email</label>
+          <label htmlFor="profile-email">
+            Email
+            {changedFields.email && <span>Changed</span>}
+          </label>
           <input
             id="profile-email"
             name="email"
@@ -98,7 +128,10 @@ function ProfileDraftForm({ profile, onFieldChange }: ProfileDraftFormProps) {
         </div>
 
         <div>
-          <label htmlFor="profile-bio">Bio</label>
+          <label htmlFor="profile-bio">
+            Bio
+            {changedFields.bio && <span>Changed</span>}
+          </label>
           <textarea
             id="profile-bio"
             name="bio"
@@ -122,30 +155,44 @@ function SaveStatusPanel({
 }: SaveStatusPanelProps) {
   const isSaving = status === 'saving'
   const saveFailed = status === 'error'
+  const statusTone = saveFailed
+    ? 'error'
+    : isSaving
+      ? 'saving'
+      : isDirty
+        ? 'dirty'
+        : 'synced'
 
   return (
     <section
       className="profile-panel profile-panel--save"
       aria-labelledby="save-status-title"
     >
-      <p className="profile-panel__stage">Save</p>
-      <h2 id="save-status-title">Persistence boundary</h2>
-      <div className="save-placeholder">
+      <p className="profile-panel__stage">Persistence lifecycle</p>
+      <h2 id="save-status-title">Save state</h2>
+      <div className={`save-status save-status--${statusTone}`}>
         <span className="save-placeholder__indicator" aria-hidden="true" />
-        <p role="status">
-          {isSaving
-            ? 'Saving...'
-            : saveFailed
-              ? 'Save failed'
-              : isDirty
-                ? 'Local draft changed'
-                : 'Draft matches server'}
-        </p>
+        <div>
+          <p className="save-status__label">Current status</p>
+          <p role="status">
+            {isSaving
+              ? 'Saving...'
+              : saveFailed
+                ? 'Save failed'
+                : isDirty
+                  ? 'Local draft changed'
+                  : 'Draft matches server'}
+          </p>
+        </div>
       </div>
       {saveFailed ? (
-        <div className="profile-panel__description">
+        <div className="save-failure-details" aria-label="Failed save details">
           <p>Draft preserved</p>
           <p>Server unchanged</p>
+          <p>
+            Choose Try again to save this draft, or Discard changes to restore
+            the server snapshot.
+          </p>
         </div>
       ) : (
         <p className="profile-panel__description">
@@ -199,10 +246,12 @@ export function DayTwoPage() {
   const [shouldFailNextSave, setShouldFailNextSave] = useState(false)
   const isSavingRef = useRef(false)
 
-  const isDirty =
-    serverProfile.displayName !== draftProfile.displayName ||
-    serverProfile.email !== draftProfile.email ||
-    serverProfile.bio !== draftProfile.bio
+  const changedFields = {
+    displayName: serverProfile.displayName !== draftProfile.displayName,
+    email: serverProfile.email !== draftProfile.email,
+    bio: serverProfile.bio !== draftProfile.bio,
+  }
+  const isDirty = Object.values(changedFields).some(Boolean)
 
   function updateDraftField(field: keyof Profile, value: string) {
     setDraftProfile((currentProfile) => ({
@@ -254,9 +303,13 @@ export function DayTwoPage() {
       </header>
 
       <div className="profile-workspace__panels">
-        <PersistedProfilePanel profile={serverProfile} />
+        <PersistedProfilePanel
+          profile={serverProfile}
+          changedFields={changedFields}
+        />
         <ProfileDraftForm
           profile={draftProfile}
+          changedFields={changedFields}
           onFieldChange={updateDraftField}
         />
         <SaveStatusPanel
