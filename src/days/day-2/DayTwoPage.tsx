@@ -262,6 +262,7 @@ export function DayTwoPage() {
 
   function discardDraft() {
     setDraftProfile({ ...serverProfile })
+    setStatus('idle');
   }
 
   function simulateNextSaveFailure() {
