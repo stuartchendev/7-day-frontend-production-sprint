@@ -17,6 +17,7 @@ type ProfileDraftFormProps = {
 
 type SaveStatusPanelProps = {
   isDirty: boolean
+  onDiscard: () => void
 }
 
 const initialProfile: Profile = {
@@ -109,7 +110,7 @@ function ProfileDraftForm({ profile, onFieldChange }: ProfileDraftFormProps) {
   )
 }
 
-function SaveStatusPanel({ isDirty }: SaveStatusPanelProps) {
+function SaveStatusPanel({ isDirty, onDiscard }: SaveStatusPanelProps) {
   return (
     <section
       className="profile-panel profile-panel--save"
@@ -126,6 +127,14 @@ function SaveStatusPanel({ isDirty }: SaveStatusPanelProps) {
       <p className="profile-panel__description">
         Save orchestration is intentionally outside this slice.
       </p>
+      <button
+        className="discard-button"
+        type="button"
+        onClick={onDiscard}
+        disabled={!isDirty}
+      >
+        Discard changes
+      </button>
     </section>
   )
 }
@@ -148,6 +157,10 @@ export function DayTwoPage() {
     }))
   }
 
+  function discardDraft() {
+    setDraftProfile({ ...serverProfile })
+  }
+
   return (
     <main className="profile-workspace">
       <header className="profile-workspace__header">
@@ -165,7 +178,7 @@ export function DayTwoPage() {
           profile={draftProfile}
           onFieldChange={updateDraftField}
         />
-        <SaveStatusPanel isDirty={isDirty} />
+        <SaveStatusPanel isDirty={isDirty} onDiscard={discardDraft} />
       </div>
     </main>
   )

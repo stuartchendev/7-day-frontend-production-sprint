@@ -1178,6 +1178,33 @@ h1 {
   font-weight: 700;
 }
 
+.discard-button {
+  width: 100%;
+  margin-top: 24px;
+  padding: 12px 14px;
+  border: 1px solid #7d8b81;
+  border-radius: 10px;
+  background: #ffffff;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.discard-button:hover:not(:disabled) {
+  border-color: #1d251f;
+}
+
+.discard-button:focus-visible {
+  outline: 3px solid #1d251f;
+  outline-offset: 3px;
+}
+
+.discard-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 @media (max-width: 960px) {
   .profile-workspace__panels {
     grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
