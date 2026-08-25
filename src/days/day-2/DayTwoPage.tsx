@@ -14,8 +14,10 @@ type ProfileDraftFormProps = {
 type SaveStatusPanelProps = {
   isDirty: boolean
   status: SaveStatus
+  isFailureArmed: boolean
   onSave: () => void
   onDiscard: () => void
+  onSimulateNextSaveFailure: () => void
 }
 
 type SaveStatus = 'idle' | 'saving' | 'error'
@@ -113,8 +115,10 @@ function ProfileDraftForm({ profile, onFieldChange }: ProfileDraftFormProps) {
 function SaveStatusPanel({
   isDirty,
   status,
+  isFailureArmed,
   onSave,
   onDiscard,
+  onSimulateNextSaveFailure,
 }: SaveStatusPanelProps) {
   const isSaving = status === 'saving'
   const saveFailed = status === 'error'
@@ -170,6 +174,18 @@ function SaveStatusPanel({
           Save changes
         </button>
       )}
+      <div className="save-demo-control">
+        <p className="save-demo-control__label">Demo control</p>
+        <button
+          className="save-demo-control__button"
+          type="button"
+          onClick={onSimulateNextSaveFailure}
+          disabled={isSaving || isFailureArmed}
+        >
+          Simulate next save failure
+        </button>
+        {isFailureArmed && <p>Failure armed ✓</p>}
+      </div>
     </section>
   )
 }
@@ -180,6 +196,7 @@ export function DayTwoPage() {
     ...initialProfile,
   }))
   const [status, setStatus] = useState<SaveStatus>('idle')
+  const [shouldFailNextSave, setShouldFailNextSave] = useState(false)
   const isSavingRef = useRef(false)
 
   const isDirty =
@@ -198,16 +215,22 @@ export function DayTwoPage() {
     setDraftProfile({ ...serverProfile })
   }
 
+  function simulateNextSaveFailure() {
+    setShouldFailNextSave(true)
+  }
+
   async function handleSave() {
     if (isSavingRef.current) {
       return
     }
 
     isSavingRef.current = true
+    const shouldFail = shouldFailNextSave
+    setShouldFailNextSave(false)
     setStatus('saving')
 
     try {
-      const savedProfile = await saveProfile(draftProfile)
+      const savedProfile = await saveProfile(draftProfile, { shouldFail })
 
       setServerProfile({ ...savedProfile })
       setDraftProfile({ ...savedProfile })
@@ -239,8 +262,10 @@ export function DayTwoPage() {
         <SaveStatusPanel
           isDirty={isDirty}
           status={status}
+          isFailureArmed={shouldFailNextSave}
           onSave={handleSave}
           onDiscard={discardDraft}
+          onSimulateNextSaveFailure={simulateNextSaveFailure}
         />
       </div>
     </main>

@@ -1234,6 +1234,41 @@ h1 {
   opacity: 0.5;
 }
 
+.save-demo-control {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed #aeb9b0;
+}
+
+.save-demo-control__label,
+.save-demo-control > p:last-child {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.save-demo-control > p:last-child {
+  margin: 10px 0 0;
+  color: #44614b;
+}
+
+.save-demo-control__button {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px dashed #7d8b81;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.save-demo-control__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 
 @media (max-width: 960px) {
   .profile-workspace__panels {

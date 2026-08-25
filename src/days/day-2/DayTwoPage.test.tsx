@@ -195,4 +195,46 @@ describe('DayTwoPage profile ownership', () => {
     expect(within(persistedPanel).getByText('Penguin')).toBeInTheDocument()
     expect(mockedSaveProfile).toHaveBeenCalledTimes(2)
   })
+
+  it('arms one simulated failure for the next real save, then retries normally', async () => {
+    const user = userEvent.setup()
+    mockedSaveProfile.mockImplementation(async (profile, options) => {
+      if (options?.shouldFail) {
+        throw new Error('Profile save failed')
+      }
+
+      return profile
+    })
+    render(<DayTwoPage />)
+
+    await user.click(
+      screen.getByRole('button', { name: 'Simulate next save failure' }),
+    )
+    expect(screen.getByText('Failure armed ✓')).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Simulate next save failure' }),
+    ).toBeDisabled()
+
+    const displayNameInput = screen.getByLabelText('Display name')
+    await user.clear(displayNameInput)
+    await user.type(displayNameInput, 'Penguin')
+    await user.click(screen.getByRole('button', { name: 'Save changes' }))
+
+    expect(await screen.findByText('Save failed')).toBeInTheDocument()
+    expect(screen.queryByText('Failure armed ✓')).not.toBeInTheDocument()
+    expect(mockedSaveProfile).toHaveBeenLastCalledWith(
+      expect.objectContaining({ displayName: 'Penguin' }),
+      { shouldFail: true },
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Try again' }))
+
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent('Draft matches server'),
+    )
+    expect(mockedSaveProfile).toHaveBeenLastCalledWith(
+      expect.objectContaining({ displayName: 'Penguin' }),
+      { shouldFail: false },
+    )
+  })
 })
