@@ -1,6 +1,7 @@
 import { SignalPanel } from './observability/SignalPanel'
 import { useSignalPresentationQueue } from './observability/useSignalPresentationQueue'
 import { useWorkshopSearch } from './useWorkshopSearch'
+import { Link } from 'react-router-dom'
 
 export function DayOnePage() {
   const { currentEvent, enqueueEvent } = useSignalPresentationQueue()
@@ -12,6 +13,7 @@ export function DayOnePage() {
 
   return (
     <main className="day-one-layout">
+      <Link className='back-link' to={`/`}>← Back to Sprint Home</Link>
       <SignalPanel state={state} currentEvent={currentEvent} />
 
       <section
