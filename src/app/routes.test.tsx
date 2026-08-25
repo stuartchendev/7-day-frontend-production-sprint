@@ -6,7 +6,7 @@ import {
   type RouteObject,
 } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
-import { DayOnePage } from '../days/day-1/DayOnePage'
+import { DayTwoPage } from '../days/day-2/DayTwoPage'
 import type { SprintDay } from '../days/types'
 import { createSprintRoutes } from './routes'
 
@@ -58,18 +58,18 @@ describe('Sprint routes', () => {
   })
 
   it('reaches an in-progress day directly without publishing it on the index', () => {
-    renderRoute('/day-1', [], [
+    renderRoute('/day-2', [], [
       {
-        path: '/day-1',
-        element: <DayOnePage />,
+        path: '/day-2',
+        element: <DayTwoPage />,
       },
     ])
 
     expect(
-      screen.getByRole('heading', { name: 'Workshop Studio Knowledge Base' }),
+      screen.getByRole('heading', { name: 'Profile Sync Workspace' }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('searchbox', { name: 'Search articles' }),
+      screen.getByRole('textbox', { name: 'Display name' }),
     ).toBeInTheDocument()
   })
 
