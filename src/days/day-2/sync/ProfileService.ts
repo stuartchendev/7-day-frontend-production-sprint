@@ -1,19 +1,26 @@
 
-import type { Profile } from "../type";
+import type { Profile } from '../type'
 
-const SAVE_LATENCY_MS = 900;
+const SAVE_LATENCY_MS = 900
 
-const delay = (ms: number) => {
-    new Promise<void>((resolve) => {
-        setTimeout(resolve, ms);
-    })
+type SaveProfileOptions = {
+    shouldFail?: boolean
 }
 
+const delay = (ms: number) =>
+    new Promise<void>((resolve) => {
+        setTimeout(resolve, ms)
+    })
+
 export async function saveProfile(
-    profile: Profile
+    profile: Profile,
+    { shouldFail = false }: SaveProfileOptions = {},
 ): Promise<Profile> {
+    await delay(SAVE_LATENCY_MS)
 
-    await delay(SAVE_LATENCY_MS);
+    if (shouldFail) {
+        throw new Error('Profile save failed')
+    }
 
-    return profile;
+    return { ...profile }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import type { Profile } from './type'
 import { saveProfile } from './sync/ProfileService'
 
@@ -13,7 +13,8 @@ type ProfileDraftFormProps = {
 
 type SaveStatusPanelProps = {
   isDirty: boolean
-  handleSave: () => void
+  status: SaveStatus
+  onSave: () => void
   onDiscard: () => void
 }
 
@@ -109,7 +110,15 @@ function ProfileDraftForm({ profile, onFieldChange }: ProfileDraftFormProps) {
   )
 }
 
-function SaveStatusPanel({ isDirty, handleSave, onDiscard }: SaveStatusPanelProps) {
+function SaveStatusPanel({
+  isDirty,
+  status,
+  onSave,
+  onDiscard,
+}: SaveStatusPanelProps) {
+  const isSaving = status === 'saving'
+  const saveFailed = status === 'error'
+
   return (
     <section
       className="profile-panel profile-panel--save"
@@ -120,28 +129,47 @@ function SaveStatusPanel({ isDirty, handleSave, onDiscard }: SaveStatusPanelProp
       <div className="save-placeholder">
         <span className="save-placeholder__indicator" aria-hidden="true" />
         <p role="status">
-          {isDirty ? 'Local draft changed' : 'Draft matches server'}
+          {isSaving
+            ? 'Saving...'
+            : saveFailed
+              ? 'Save failed'
+              : isDirty
+                ? 'Local draft changed'
+                : 'Draft matches server'}
         </p>
       </div>
-      <p className="profile-panel__description">
-        Save orchestration is intentionally outside this slice.
-      </p>
+      {saveFailed ? (
+        <div className="profile-panel__description">
+          <p>Draft preserved</p>
+          <p>Server unchanged</p>
+        </div>
+      ) : (
+        <p className="profile-panel__description">
+          Save sends the working copy to the persisted profile.
+        </p>
+      )}
       <button
         className="discard-button"
         type="button"
         onClick={onDiscard}
-        disabled={!isDirty}
+        disabled={!isDirty || isSaving}
       >
         Discard changes
       </button>
-      <button
-        className="save-button"
-        type="button"
-        onClick={handleSave}
-        disabled={!isDirty}
-      >
-        Save changes
-      </button>
+      {saveFailed ? (
+        <button className="save-button" type="button" onClick={onSave}>
+          Try again
+        </button>
+      ) : (
+        <button
+          className="save-button"
+          type="button"
+          onClick={onSave}
+          disabled={!isDirty || isSaving}
+        >
+          Save changes
+        </button>
+      )}
     </section>
   )
 }
@@ -151,7 +179,8 @@ export function DayTwoPage() {
   const [draftProfile, setDraftProfile] = useState<Profile>(() => ({
     ...initialProfile,
   }))
-  const [status, setStatus] = useState<SaveStatus>('idle');
+  const [status, setStatus] = useState<SaveStatus>('idle')
+  const isSavingRef = useRef(false)
 
   const isDirty =
     serverProfile.displayName !== draftProfile.displayName ||
@@ -170,13 +199,24 @@ export function DayTwoPage() {
   }
 
   async function handleSave() {
-    setStatus('saving');
+    if (isSavingRef.current) {
+      return
+    }
 
-    const savedProfile = await saveProfile(draftProfile);
-    if (savedProfile) console.log("Save Success");
-    setServerProfile(savedProfile);
-    setDraftProfile(savedProfile);
-    setStatus('idle');
+    isSavingRef.current = true
+    setStatus('saving')
+
+    try {
+      const savedProfile = await saveProfile(draftProfile)
+
+      setServerProfile({ ...savedProfile })
+      setDraftProfile({ ...savedProfile })
+      setStatus('idle')
+    } catch {
+      setStatus('error')
+    } finally {
+      isSavingRef.current = false
+    }
   }
 
   return (
@@ -196,7 +236,12 @@ export function DayTwoPage() {
           profile={draftProfile}
           onFieldChange={updateDraftField}
         />
-        <SaveStatusPanel isDirty={isDirty} handleSave={handleSave} onDiscard={discardDraft} />
+        <SaveStatusPanel
+          isDirty={isDirty}
+          status={status}
+          onSave={handleSave}
+          onDiscard={discardDraft}
+        />
       </div>
     </main>
   )

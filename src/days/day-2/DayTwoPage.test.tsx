@@ -1,9 +1,20 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DayTwoPage } from './DayTwoPage'
+import { saveProfile } from './sync/ProfileService'
+
+vi.mock('./sync/ProfileService', () => ({
+  saveProfile: vi.fn(),
+}))
+
+const mockedSaveProfile = vi.mocked(saveProfile)
 
 describe('DayTwoPage profile ownership', () => {
+  beforeEach(() => {
+    mockedSaveProfile.mockReset()
+  })
+
   it('starts with matching persisted and draft values', () => {
     render(<DayTwoPage />)
 
@@ -26,6 +37,7 @@ describe('DayTwoPage profile ownership', () => {
     expect(
       screen.getByRole('button', { name: 'Discard changes' }),
     ).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Save changes' })).toBeDisabled()
   })
 
   it('updates the local draft without changing the persisted profile', async () => {
@@ -96,5 +108,91 @@ describe('DayTwoPage profile ownership', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('Draft matches server')
     expect(discardButton).toBeDisabled()
+  })
+
+  it('shows saving and syncs both profiles after a successful save', async () => {
+    const user = userEvent.setup()
+    let resolveSave: (profile: { displayName: string; email: string; bio: string }) => void
+    const saveComplete = new Promise<{
+      displayName: string
+      email: string
+      bio: string
+    }>((resolve) => {
+      resolveSave = resolve
+    })
+    mockedSaveProfile.mockReturnValueOnce(saveComplete)
+    render(<DayTwoPage />)
+
+    const displayNameInput = screen.getByLabelText('Display name')
+    await user.clear(displayNameInput)
+    await user.type(displayNameInput, 'Penguin')
+    await user.click(screen.getByRole('button', { name: 'Save changes' }))
+
+    expect(screen.getByRole('status')).toHaveTextContent('Saving...')
+    expect(screen.getByRole('button', { name: 'Save changes' })).toBeDisabled()
+
+    resolveSave!({
+      displayName: 'Penguin',
+      email: 'stuart@example.com',
+      bio: 'Frontend engineer building calm, reliable product experiences.',
+    })
+
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent('Draft matches server'),
+    )
+    expect(
+      within(
+        screen.getByRole('region', { name: 'Persisted snapshot' }),
+      ).getByText('Penguin'),
+    ).toBeInTheDocument()
+    expect(displayNameInput).toHaveValue('Penguin')
+  })
+
+  it('preserves the draft and allows retrying after a failed save', async () => {
+    const user = userEvent.setup()
+    let resolveRetry: (profile: {
+      displayName: string
+      email: string
+      bio: string
+    }) => void
+    const retryComplete = new Promise<{
+      displayName: string
+      email: string
+      bio: string
+    }>((resolve) => {
+      resolveRetry = resolve
+    })
+    mockedSaveProfile
+      .mockRejectedValueOnce(new Error('Profile save failed'))
+      .mockReturnValueOnce(retryComplete)
+    render(<DayTwoPage />)
+
+    const persistedPanel = screen.getByRole('region', {
+      name: 'Persisted snapshot',
+    })
+    const displayNameInput = screen.getByLabelText('Display name')
+    await user.clear(displayNameInput)
+    await user.type(displayNameInput, 'Penguin')
+    await user.click(screen.getByRole('button', { name: 'Save changes' }))
+
+    expect(await screen.findByText('Save failed')).toBeInTheDocument()
+    expect(screen.getByText('Draft preserved')).toBeInTheDocument()
+    expect(screen.getByText('Server unchanged')).toBeInTheDocument()
+    expect(displayNameInput).toHaveValue('Penguin')
+    expect(within(persistedPanel).getByText('Stuart Chen')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Try again' }))
+
+    expect(screen.getByRole('status')).toHaveTextContent('Saving...')
+    resolveRetry!({
+      displayName: 'Penguin',
+      email: 'stuart@example.com',
+      bio: 'Frontend engineer building calm, reliable product experiences.',
+    })
+    await waitFor(() =>
+      expect(screen.getByRole('status')).toHaveTextContent('Draft matches server'),
+    )
+    expect(within(persistedPanel).getByText('Penguin')).toBeInTheDocument()
+    expect(mockedSaveProfile).toHaveBeenCalledTimes(2)
   })
 })
