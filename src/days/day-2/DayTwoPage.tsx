@@ -1,10 +1,6 @@
 import { useState } from 'react'
-
-type Profile = {
-  displayName: string
-  email: string
-  bio: string
-}
+import type { Profile } from './type'
+import { saveProfile } from './sync/ProfileService'
 
 type PersistedProfilePanelProps = {
   profile: Profile
@@ -17,8 +13,11 @@ type ProfileDraftFormProps = {
 
 type SaveStatusPanelProps = {
   isDirty: boolean
+  handleSave: () => void
   onDiscard: () => void
 }
+
+type SaveStatus = 'idle' | 'saving' | 'error'
 
 const initialProfile: Profile = {
   displayName: 'Stuart Chen',
@@ -110,7 +109,7 @@ function ProfileDraftForm({ profile, onFieldChange }: ProfileDraftFormProps) {
   )
 }
 
-function SaveStatusPanel({ isDirty, onDiscard }: SaveStatusPanelProps) {
+function SaveStatusPanel({ isDirty, handleSave, onDiscard }: SaveStatusPanelProps) {
   return (
     <section
       className="profile-panel profile-panel--save"
@@ -135,15 +134,24 @@ function SaveStatusPanel({ isDirty, onDiscard }: SaveStatusPanelProps) {
       >
         Discard changes
       </button>
+      <button
+        className="save-button"
+        type="button"
+        onClick={handleSave}
+        disabled={!isDirty}
+      >
+        Save changes
+      </button>
     </section>
   )
 }
 
 export function DayTwoPage() {
-  const [serverProfile] = useState<Profile>(() => ({ ...initialProfile }))
+  const [serverProfile, setServerProfile] = useState<Profile>(() => ({ ...initialProfile }))
   const [draftProfile, setDraftProfile] = useState<Profile>(() => ({
     ...initialProfile,
   }))
+  const [status, setStatus] = useState<SaveStatus>('idle');
 
   const isDirty =
     serverProfile.displayName !== draftProfile.displayName ||
@@ -159,6 +167,16 @@ export function DayTwoPage() {
 
   function discardDraft() {
     setDraftProfile({ ...serverProfile })
+  }
+
+  async function handleSave() {
+    setStatus('saving');
+
+    const savedProfile = await saveProfile(draftProfile);
+    if (savedProfile) console.log("Save Success");
+    setServerProfile(savedProfile);
+    setDraftProfile(savedProfile);
+    setStatus('idle');
   }
 
   return (
@@ -178,7 +196,7 @@ export function DayTwoPage() {
           profile={draftProfile}
           onFieldChange={updateDraftField}
         />
-        <SaveStatusPanel isDirty={isDirty} onDiscard={discardDraft} />
+        <SaveStatusPanel isDirty={isDirty} handleSave={handleSave} onDiscard={discardDraft} />
       </div>
     </main>
   )
