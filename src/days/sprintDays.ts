@@ -21,7 +21,7 @@ export const sprintDays: SprintDay[] = [
     slug: 'day-2',
     title: 'Profile Sync Workspace',
     summary: 'A failed save rolls back neither the draft nor the server truth. Each copy keeps the state it actually owns.',
-    publishedOn: '2026-08-24',
+    publishedOn: '2026-08-25',
     Component: DayTwoPage,
   },
   {

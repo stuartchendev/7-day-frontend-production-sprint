@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DayTwoPage } from './DayTwoPage'
 import { saveProfile } from './sync/ProfileService'
+import { MemoryRouter } from 'react-router-dom';
 
 vi.mock('./sync/ProfileService', () => ({
   saveProfile: vi.fn(),
@@ -16,7 +17,10 @@ describe('DayTwoPage profile ownership', () => {
   })
 
   it('starts with matching persisted and draft values', () => {
-    render(<DayTwoPage />)
+    render(
+      <MemoryRouter>
+        <DayTwoPage />
+      </MemoryRouter>,)
 
     const persistedPanel = screen.getByRole('region', {
       name: 'Persisted snapshot',
@@ -42,7 +46,11 @@ describe('DayTwoPage profile ownership', () => {
 
   it('updates the local draft without changing the persisted profile', async () => {
     const user = userEvent.setup()
-    render(<DayTwoPage />)
+    render(
+      <MemoryRouter>
+        <DayTwoPage />
+      </MemoryRouter>,
+    );
 
     const persistedPanel = screen.getByRole('region', {
       name: 'Persisted snapshot',
@@ -60,7 +68,11 @@ describe('DayTwoPage profile ownership', () => {
 
   it('restores every draft field from the persisted profile', async () => {
     const user = userEvent.setup()
-    render(<DayTwoPage />)
+    render(
+      <MemoryRouter>
+        <DayTwoPage />
+      </MemoryRouter>,
+    );
 
     const persistedPanel = screen.getByRole('region', {
       name: 'Persisted snapshot',
@@ -121,7 +133,11 @@ describe('DayTwoPage profile ownership', () => {
       resolveSave = resolve
     })
     mockedSaveProfile.mockReturnValueOnce(saveComplete)
-    render(<DayTwoPage />)
+    render(
+      <MemoryRouter>
+        <DayTwoPage />
+      </MemoryRouter>,
+    );
 
     const displayNameInput = screen.getByLabelText('Display name')
     await user.clear(displayNameInput)
@@ -165,7 +181,11 @@ describe('DayTwoPage profile ownership', () => {
     mockedSaveProfile
       .mockRejectedValueOnce(new Error('Profile save failed'))
       .mockReturnValueOnce(retryComplete)
-    render(<DayTwoPage />)
+    render(
+      <MemoryRouter>
+        <DayTwoPage />
+      </MemoryRouter>,
+    );
 
     const persistedPanel = screen.getByRole('region', {
       name: 'Persisted snapshot',
@@ -205,7 +225,11 @@ describe('DayTwoPage profile ownership', () => {
 
       return profile
     })
-    render(<DayTwoPage />)
+    render(
+      <MemoryRouter>
+        <DayTwoPage />
+      </MemoryRouter>,
+    );
 
     await user.click(
       screen.getByRole('button', { name: 'Simulate next save failure' }),
