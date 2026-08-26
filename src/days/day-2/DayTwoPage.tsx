@@ -295,7 +295,7 @@ export function DayTwoPage() {
 
   return (
     <main className="profile-workspace">
-      <Link className='back-link' to={`/`}>← Back to Sprint Home</Link>
+      <Link className='back-link' to="/">← Back to Sprint Home</Link>
       <header className="profile-workspace__header">
         <p className="sprint-index__eyebrow">Day 2 · Account settings</p>
         <h1>Profile Sync Workspace</h1>

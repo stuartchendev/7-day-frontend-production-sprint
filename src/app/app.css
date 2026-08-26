@@ -61,6 +61,11 @@ h1 {
   letter-spacing: -0.055em;
 }
 
+.back-link {
+  text-underline-offset: 0.25em;
+  font-weight: 700;
+}
+
 .sprint-index__intro {
   max-width: 62ch;
   margin: 0;
@@ -1032,6 +1037,7 @@ h1 {
 
 .profile-workspace__header {
   max-width: 700px;
+  margin-top: 56px;
 }
 
 .profile-workspace__header h1 {
@@ -1333,14 +1339,14 @@ h1 {
 }
 
 .save-demo-control__label,
-.save-demo-control > p:last-child {
+.save-demo-control>p:last-child {
   margin: 0 0 10px;
   color: #67736b;
   font-size: 0.85rem;
   font-weight: 700;
 }
 
-.save-demo-control > p:last-child {
+.save-demo-control>p:last-child {
   margin: 10px 0 0;
   color: #44614b;
 }
