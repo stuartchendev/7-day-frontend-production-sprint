@@ -7,9 +7,10 @@ import { reserveTable } from './booking/bookingAdapter'
 const slots = [
     { time: '18:00', available: true },
     { time: '18:30', available: true },
+    { time: '19:00', available: false },
     { time: '19:30', available: true },
+    { time: '20:00', available: true },
 ]
-
 export function DayFourPage() {
     const [state, dispatch] = useReducer(
         bookingReducer,
@@ -73,7 +74,6 @@ export function DayFourPage() {
             return
         }
     }
-    console.log("confirm", state.confirmation)
     return (
         <>
             <p>Booking status: {state.bookingStatus}</p>
@@ -89,9 +89,14 @@ export function DayFourPage() {
                         key={slot.time}
                         type="button"
                         onClick={() => handleTimeSelect(slot.time)}
-                        disabled={slot.time === selectedTime || isReserved}
+                        disabled={
+                            !slot.available ||
+                            slot.time === selectedTime ||
+                            isReserved
+                        }
                     >
                         {slot.time}
+                        {!slot.available && ' (Unavailable)'}
                     </button>
                 )
             })}
