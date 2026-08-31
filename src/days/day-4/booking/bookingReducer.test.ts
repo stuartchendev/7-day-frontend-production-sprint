@@ -32,13 +32,8 @@ describe('bookingReducer', () => {
 
         expect(nextState.bookingStatus).toBe('success')
         expect(nextState.reservations).toEqual([reservation])
-        expect(initialBookingState).toEqual({
-            selectedDate: '',
-            selectedTime: null,
-            availability: null,
-            bookingStatus: 'idle',
-            reservations: [],
-        })
+        expect(nextState.confirmation).toEqual(reservation)
+        expect(initialBookingState.reservations).toEqual([])
     })
     // 503
     it('sets temporary-error when booking temporarily fails', () => {
@@ -76,5 +71,31 @@ describe('bookingReducer', () => {
 
         expect(nextState.selectedDate).toBe('2026-08-29')
         expect(nextState.selectedTime).toBeNull()
+    })
+    it('resets transient booking state when the date changes', () => {
+        const state = {
+            ...initialBookingState,
+            selectedDate: '2026-08-28',
+            selectedTime: '18:30',
+            bookingStatus: 'conflict' as const,
+            confirmation: {
+                id: 'reservation-1',
+                date: '2026-08-28',
+                time: '18:30',
+            },
+        }
+
+        const nextState = bookingReducer(
+            state,
+            {
+                type: 'select-date',
+                date: '2026-08-29',
+            },
+        )
+
+        expect(nextState.selectedDate).toBe('2026-08-29')
+        expect(nextState.selectedTime).toBeNull()
+        expect(nextState.bookingStatus).toBe('idle')
+        expect(nextState.confirmation).toBeNull()
     })
 })
