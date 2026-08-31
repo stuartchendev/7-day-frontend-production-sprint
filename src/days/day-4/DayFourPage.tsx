@@ -2,6 +2,8 @@ import { useReducer, useState } from 'react'
 import { bookingReducer } from './booking/bookingReducer'
 import { initialBookingState } from './booking/type'
 import { reserveTable } from './booking/bookingAdapter'
+import { Link } from 'react-router-dom'
+import "./day-four.css"
 
 // test value
 const slots = [
@@ -21,7 +23,7 @@ export function DayFourPage() {
     const isConflict = state.bookingStatus === 'conflict'
     // test
 
-    const selectedDate = "2026-8-27"
+    const [selectedDate, setSelectedDate] = useState<string>('');
     const [selectedTime, setSelectedTime] = useState<string>('');
 
     const isAlreadyReserved = state.reservations.some(
@@ -75,60 +77,119 @@ export function DayFourPage() {
         }
     }
     return (
-        <>
-            <p>Booking status: {state.bookingStatus}</p>
-            {slots.map((slot) => {
-                const isReserved = state.reservations.some(
-                    (reservation) =>
-                        reservation.date === selectedDate &&
-                        reservation.time === slot.time
-                )
+        <main className='day-four'>
+            <Link className="day-four__back-link" to="/">
+                ← Back to Sprint Home
+            </Link>
+            <header className='day-four__header'>
+                <p className="day-four__eyebrow">
+                    Day 4 · Booking reservation
+                </p>
+                <h1>
+                    Book a table, handle the uncertainty
+                </h1>
+                <p>
+                    The booking flow models loading, temporary failure, and
+                    reservation conflicts without relying on a real API.
+                </p>
+            </header>
 
-                return (
+            <div className='day-four__content'>
+                <section className='booking_form'>
+                    <h2>Booking Form</h2>
+
+                    <label htmlFor="booking-date">
+                        Date
+                    </label>
+                    <input
+                        id="booking-date"
+                        type="date"
+                        value={selectedDate}
+                        onChange={(event) => setSelectedDate(event.target.value)}
+                    />
+                    <p className="booking_form__label">
+                        Choose a time
+                    </p>
+                    {slots.map((slot) => {
+                        const isReserved = state.reservations.some(
+                            (reservation) =>
+                                reservation.date === selectedDate &&
+                                reservation.time === slot.time
+                        )
+                        const isSelected = slot.time === selectedTime
+
+                        return (
+                            <button
+                                className={[
+                                    'booking_form__slot',
+                                    isSelected && 'is-selected',
+                                    isReserved && 'is-reserved',
+                                    !slot.available && 'is-unavailable',
+                                ]
+                                    .filter(Boolean)
+                                    .join(' ')}
+                                key={slot.time}
+                                type="button"
+                                onClick={() => handleTimeSelect(slot.time)}
+                                disabled={
+                                    !slot.available ||
+                                    slot.time === selectedTime ||
+                                    isReserved
+                                }
+                            >
+                                {slot.time}
+                                {!slot.available && ' (Unavailable)'}
+                            </button>
+                        )
+                    })}
                     <button
-                        key={slot.time}
-                        type="button"
-                        onClick={() => handleTimeSelect(slot.time)}
-                        disabled={
-                            !slot.available ||
-                            slot.time === selectedTime ||
-                            isReserved
-                        }
-                    >
-                        {slot.time}
-                        {!slot.available && ' (Unavailable)'}
+                        className='booking-form__reserve'
+                        onClick={handleReserve}>
+                        Reserve table
                     </button>
-                )
-            })}
-            <button onClick={handleReserve}>
-                Reserve
-            </button>
-            {isLoading && <p>Booking...</p>}
-            {isTemporaryError && (
-                <div>
-                    <p>Something went wrong. Please try again.</p>
-                    <button onClick={handleRetry}>
-                        Retry
-                    </button>
-                </div>
-            )}
-            {state.confirmation &&
-                < div>
-                    <p>Reservation confirmed!</p>
-                    {state.reservations.map((reservation) => (
-                        <div key={reservation.id}>
-                            <p>Date: {reservation.date}</p>
-                            <p>Time: {reservation.time}</p>
-                        </div>
-                    ))}
-                </div >
-            }
-            {isConflict && (
-                <div>
-                    <p>This time slot is no longer available.</p>
-                </div>
-            )}
+                    <p>Booking status: {state.bookingStatus}</p>
+                </section>
+                <div className='day-four__sidebar'>
+                    <section className='booking_reservation'>
+                        <h2>Reservations</h2>
 
-        </>
+                        {state.reservations.length === 0 ? (
+                            <p>No reservations yet.</p>
+                        ) : (
+                            state.reservations.map((reservation) => (
+                                <div key={reservation.id}>
+                                    <p>Date: {reservation.date}</p>
+                                    <p>Time: {reservation.time}</p>
+                                </div>
+                            ))
+                        )}
+
+                    </section>
+
+                    <section className='booking_result'>
+                        {isLoading && <p>Booking...</p>}
+                        {state.confirmation &&
+                            < div>
+                                <p>Reservation confirmed!</p>
+                            </div >
+                        }
+                        {isConflict && (
+                            <div>
+                                <p>This time slot is no longer available.</p>
+                            </div>
+                        )}
+                        {isTemporaryError && (
+                            <div>
+                                <p>Something went wrong. Please try again.</p>
+                                <button onClick={handleRetry}>
+                                    Retry
+                                </button>
+                            </div>
+                        )}
+                    </section>
+                </div>
+            </div>
+        </main>
+
     );
 }
