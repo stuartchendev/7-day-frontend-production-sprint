@@ -13,6 +13,15 @@ const slots = [
     { time: '19:30', available: true },
     { time: '20:00', available: true },
 ]
+
+const getToday = () => {
+    const today = new Date()
+    const offset = today.getTimezoneOffset()
+    const localDate = new Date(today.getTime() - offset * 60 * 1000)
+
+    return localDate.toISOString().slice(0, 10)
+}
+
 export function DayFourPage() {
     const [state, dispatch] = useReducer(
         bookingReducer,
@@ -22,8 +31,8 @@ export function DayFourPage() {
     const isTemporaryError = state.bookingStatus === 'temporary-error'
     const isConflict = state.bookingStatus === 'conflict'
     // test
-
-    const [selectedDate, setSelectedDate] = useState<string>('');
+    const [unavailableTimes, setUnavailableTimes] = useState<string[]>([])
+    const [selectedDate, setSelectedDate] = useState<string>(getToday());
     const [selectedTime, setSelectedTime] = useState<string>('');
 
     const isAlreadyReserved = state.reservations.some(
@@ -70,6 +79,11 @@ export function DayFourPage() {
         }
 
         if (result.status === 409) {
+            setUnavailableTimes((times) => [
+                ...times,
+                selectedTime,
+            ])
+
             dispatch({
                 type: 'reserve-conflict',
             })
@@ -107,6 +121,11 @@ export function DayFourPage() {
                         value={selectedDate}
                         onChange={(event) => setSelectedDate(event.target.value)}
                     />
+                    {!selectedDate && (
+                        <p className="booking_form__error">
+                            Please choose a date.
+                        </p>
+                    )}
                     <p className="booking_form__label">
                         Choose a time
                     </p>
@@ -117,6 +136,9 @@ export function DayFourPage() {
                                 reservation.time === slot.time
                         )
                         const isSelected = slot.time === selectedTime
+                        const isUnavailable =
+                            !slot.available ||
+                            unavailableTimes.includes(slot.time)
 
                         return (
                             <button
@@ -124,7 +146,7 @@ export function DayFourPage() {
                                     'booking_form__slot',
                                     isSelected && 'is-selected',
                                     isReserved && 'is-reserved',
-                                    !slot.available && 'is-unavailable',
+                                    isUnavailable && 'is-unavailable',
                                 ]
                                     .filter(Boolean)
                                     .join(' ')}
@@ -132,8 +154,8 @@ export function DayFourPage() {
                                 type="button"
                                 onClick={() => handleTimeSelect(slot.time)}
                                 disabled={
-                                    !slot.available ||
-                                    slot.time === selectedTime ||
+                                    isUnavailable ||
+                                    isSelected ||
                                     isReserved
                                 }
                             >
@@ -147,7 +169,11 @@ export function DayFourPage() {
                         onClick={handleReserve}>
                         Reserve table
                     </button>
-                    <p>Booking status: {state.bookingStatus}</p>
+                    {isTemporaryError && (
+                        <button onClick={handleRetry}>
+                            Retry
+                        </button>
+                    )}
                 </section>
                 <div className='day-four__sidebar'>
                     <section className='booking_reservation'>
@@ -171,6 +197,10 @@ export function DayFourPage() {
                         {state.confirmation &&
                             < div>
                                 <p>Reservation confirmed!</p>
+                                <p>
+                                    {state.confirmation.date} · {state.confirmation.time}
+                                </p>
+                                <p>Table for 2</p>
                             </div >
                         }
                         {isConflict && (
@@ -181,9 +211,6 @@ export function DayFourPage() {
                         {isTemporaryError && (
                             <div>
                                 <p>Something went wrong. Please try again.</p>
-                                <button onClick={handleRetry}>
-                                    Retry
-                                </button>
                             </div>
                         )}
                     </section>
