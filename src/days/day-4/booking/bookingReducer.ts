@@ -36,6 +36,8 @@ export function bookingReducer(
                 ...state,
                 selectedDate: action.date,
                 selectedTime: null,
+                bookingStatus: 'idle',
+                confirmation: null,
             }
         case 'select-time':
             return {

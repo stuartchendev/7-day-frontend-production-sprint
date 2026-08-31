@@ -14,13 +14,15 @@ const slots = [
     { time: '20:00', available: true },
 ]
 
-const getToday = () => {
+export function getTodayDate() {
     const today = new Date()
-    const offset = today.getTimezoneOffset()
-    const localDate = new Date(today.getTime() - offset * 60 * 1000)
+    const year = today.getFullYear()
+    const month = String(today.getMonth() + 1).padStart(2, '0')
+    const day = String(today.getDate()).padStart(2, '0')
 
-    return localDate.toISOString().slice(0, 10)
+    return `${year}-${month}-${day}`
 }
+
 
 export function DayFourPage() {
     const [state, dispatch] = useReducer(
@@ -31,9 +33,12 @@ export function DayFourPage() {
     const isTemporaryError = state.bookingStatus === 'temporary-error'
     const isConflict = state.bookingStatus === 'conflict'
     // test
-    const [unavailableTimes, setUnavailableTimes] = useState<string[]>([])
-    const [selectedDate, setSelectedDate] = useState<string>(getToday());
-    const [selectedTime, setSelectedTime] = useState<string>('');
+    const [unavailableSlots, setUnavailableSlots] = useState<
+        { date: string; time: string }[]
+    >([])
+
+    const selectedDate = state.selectedDate
+    const selectedTime = state.selectedTime
 
     const isAlreadyReserved = state.reservations.some(
         (reservation) =>
@@ -43,11 +48,16 @@ export function DayFourPage() {
 
     const handleTimeSelect = (time: string) => {
         dispatch({ type: 'booking-reset' })
-        setSelectedTime(time);
+        dispatch({ type: 'select-time', time })
     }
 
     const handleRetry = () => {
         handleReserve()
+    }
+
+    const handleDateChange = (date: string) => {
+        dispatch({ type: 'select-date', date })
+        setUnavailableSlots([])
     }
 
     const handleReserve = async () => {
@@ -79,9 +89,12 @@ export function DayFourPage() {
         }
 
         if (result.status === 409) {
-            setUnavailableTimes((times) => [
-                ...times,
-                selectedTime,
+            setUnavailableSlots((slots) => [
+                ...slots,
+                {
+                    date: selectedDate,
+                    time: selectedTime,
+                },
             ])
 
             dispatch({
@@ -118,8 +131,9 @@ export function DayFourPage() {
                     <input
                         id="booking-date"
                         type="date"
+                        min={getTodayDate()}
                         value={selectedDate}
-                        onChange={(event) => setSelectedDate(event.target.value)}
+                        onChange={(event) => handleDateChange(event.target.value)}
                     />
                     {!selectedDate && (
                         <p className="booking_form__error">
@@ -136,9 +150,15 @@ export function DayFourPage() {
                                 reservation.time === slot.time
                         )
                         const isSelected = slot.time === selectedTime
+                        const isConflictUnavailable = unavailableSlots.some(
+                            (unavailableSlot) =>
+                                unavailableSlot.date === selectedDate &&
+                                unavailableSlot.time === slot.time
+                        )
+
                         const isUnavailable =
                             !slot.available ||
-                            unavailableTimes.includes(slot.time)
+                            isConflictUnavailable
 
                         return (
                             <button
