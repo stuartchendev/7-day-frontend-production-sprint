@@ -143,100 +143,139 @@ export function DayFourPage() {
                     <p className="booking_form__label">
                         Choose a time
                     </p>
-                    {slots.map((slot) => {
-                        const isReserved = state.reservations.some(
-                            (reservation) =>
-                                reservation.date === selectedDate &&
-                                reservation.time === slot.time
-                        )
-                        const isSelected = slot.time === selectedTime
-                        const isConflictUnavailable = unavailableSlots.some(
-                            (unavailableSlot) =>
-                                unavailableSlot.date === selectedDate &&
-                                unavailableSlot.time === slot.time
-                        )
+                    <div className='booking_form__slot-layout'>
+                        {slots.map((slot) => {
+                            const isReserved = state.reservations.some(
+                                (reservation) =>
+                                    reservation.date === selectedDate &&
+                                    reservation.time === slot.time
+                            )
+                            const isSelected = slot.time === selectedTime
+                            const isConflictUnavailable = unavailableSlots.some(
+                                (unavailableSlot) =>
+                                    unavailableSlot.date === selectedDate &&
+                                    unavailableSlot.time === slot.time
+                            )
 
-                        const isUnavailable =
-                            !slot.available ||
-                            isConflictUnavailable
+                            const isUnavailable =
+                                !slot.available ||
+                                isConflictUnavailable
 
-                        return (
+                            return (
+                                <button
+                                    className={[
+                                        'booking_form__slot',
+                                        isSelected && 'is-selected',
+                                        isReserved && 'is-reserved',
+                                        isUnavailable && 'is-unavailable',
+                                    ]
+                                        .filter(Boolean)
+                                        .join(' ')}
+                                    key={slot.time}
+                                    type="button"
+                                    onClick={() => handleTimeSelect(slot.time)}
+                                    disabled={
+                                        isUnavailable ||
+                                        isSelected ||
+                                        isReserved
+                                    }
+                                >
+                                    {slot.time}
+                                    {!slot.available && ' (Unavailable)'}
+                                </button>
+                            )
+                        })}
+                    </div>
+                    <div className="booking_form__actions">
+                        {!isTemporaryError ? (
                             <button
-                                className={[
-                                    'booking_form__slot',
-                                    isSelected && 'is-selected',
-                                    isReserved && 'is-reserved',
-                                    isUnavailable && 'is-unavailable',
-                                ]
-                                    .filter(Boolean)
-                                    .join(' ')}
-                                key={slot.time}
-                                type="button"
-                                onClick={() => handleTimeSelect(slot.time)}
-                                disabled={
-                                    isUnavailable ||
-                                    isSelected ||
-                                    isReserved
-                                }
+                                className="booking-form__reserve"
+                                onClick={handleReserve}
                             >
-                                {slot.time}
-                                {!slot.available && ' (Unavailable)'}
+                                Reserve table
                             </button>
-                        )
-                    })}
-                    <button
-                        className='booking-form__reserve'
-                        onClick={handleReserve}>
-                        Reserve table
-                    </button>
-                    {isTemporaryError && (
-                        <button onClick={handleRetry}>
-                            Retry
-                        </button>
-                    )}
+                        ) : (
+                            <button
+                                className="booking-form__retry"
+                                onClick={handleRetry}>
+                                Retry
+                            </button>
+                        )}
+                    </div>
                 </section>
                 <div className='day-four__sidebar'>
                     <section className='booking_reservation'>
                         <h2>Reservations</h2>
 
-                        {state.reservations.length === 0 ? (
-                            <p>No reservations yet.</p>
-                        ) : (
-                            state.reservations.map((reservation) => (
-                                <div key={reservation.id}>
-                                    <p>Date: {reservation.date}</p>
-                                    <p>Time: {reservation.time}</p>
-                                </div>
-                            ))
-                        )}
-
+                        <div className="booking_reservation__items">
+                            {state.reservations.length === 0 ? (
+                                <p>No reservations yet.</p>
+                            ) : (
+                                state.reservations.map((reservation) => (
+                                    <div
+                                        className="booking_reservation__item"
+                                        key={reservation.id}
+                                    >
+                                        <p className="booking_reservation__date">
+                                            {reservation.date}
+                                        </p>
+                                        <p className="booking_reservation__time">
+                                            {reservation.time}
+                                        </p>
+                                    </div>
+                                ))
+                            )}
+                        </div>
                     </section>
 
                     <section className='booking_result'>
-                        {isLoading && <p>Booking...</p>}
+                        {!isLoading &&
+                            !state.confirmation &&
+                            !isConflict &&
+                            !isTemporaryError && (
+                                <div className="booking_result__empty">
+                                    <p className="booking_result__message">
+                                        Ready when you are
+                                    </p>
+                                    <p className="booking_result__info">
+                                        Choose a date and time to start your booking.
+                                    </p>
+                                </div>
+                            )}
+                        {isLoading && <p className="booking_result__message">Booking...</p>}
                         {state.confirmation &&
-                            < div>
-                                <p>Reservation confirmed!</p>
-                                <p>
+                            <div>
+                                <p className="booking_result__message">
+                                    Reservation confirmed!
+                                </p>
+
+                                <p className="booking_result__info">
                                     {state.confirmation.date} · {state.confirmation.time}
                                 </p>
-                                <p>Table for 2</p>
-                            </div >
+
+                                <p className="booking_result__info">
+                                    Table for 2
+                                </p>
+                            </div>
                         }
                         {isConflict && (
                             <div>
-                                <p>This time slot is no longer available.</p>
+                                <p className="booking_result__message">
+                                    This time slot is no longer available.
+                                </p>
                             </div>
                         )}
                         {isTemporaryError && (
                             <div>
-                                <p>Something went wrong. Please try again.</p>
+                                <p className="booking_result__message">
+                                    Something went wrong. Please try again.
+                                </p>
                             </div>
                         )}
                     </section>
                 </div>
-            </div>
-        </main>
+            </div >
+        </main >
 
     );
 }
