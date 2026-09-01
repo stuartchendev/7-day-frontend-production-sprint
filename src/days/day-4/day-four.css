@@ -145,7 +145,10 @@
 .booking_form__slot-layout {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
     gap: 8px;
+
+    height: 96px;
 }
 
 .booking_form__slot:hover:not(:disabled) {

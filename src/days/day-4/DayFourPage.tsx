@@ -2,17 +2,9 @@ import { useReducer, useState } from 'react'
 import { bookingReducer } from './booking/bookingReducer'
 import { initialBookingState } from './booking/type'
 import { reserveTable } from './booking/bookingAdapter'
+import { getAvailability } from './booking/availabilityAdapter'
 import { Link } from 'react-router-dom'
 import "./day-four.css"
-
-// test value
-const slots = [
-    { time: '18:00', available: true },
-    { time: '18:30', available: true },
-    { time: '19:00', available: false },
-    { time: '19:30', available: true },
-    { time: '20:00', available: true },
-]
 
 export function getTodayDate() {
     const today = new Date()
@@ -55,9 +47,21 @@ export function DayFourPage() {
         handleReserve()
     }
 
-    const handleDateChange = (date: string) => {
+    const handleDateChange = async (date: string) => {
         dispatch({ type: 'select-date', date })
         setUnavailableSlots([])
+
+        if (!date) {
+            return
+        }
+
+
+        const availability = await getAvailability(date)
+
+        dispatch({
+            type: 'availability-loaded',
+            availability,
+        })
     }
 
     const handleReserve = async () => {
@@ -148,16 +152,22 @@ export function DayFourPage() {
                         value={selectedDate}
                         onChange={(event) => handleDateChange(event.target.value)}
                     />
-                    {!selectedDate && (
-                        <p className="booking_form__error">
-                            Please choose a date.
-                        </p>
-                    )}
                     <p className="booking_form__label">
                         Choose a time
                     </p>
                     <div className='booking_form__slot-layout'>
-                        {slots.map((slot) => {
+                        {!selectedDate && (
+                            <p className="booking_form__slot-message">
+                                Please choose a date to view available times.
+                            </p>
+                        )}
+
+                        {selectedDate && !state.availability && (
+                            <p className="booking_form__slot-message">
+                                Loading available times…
+                            </p>
+                        )}
+                        {state.availability?.slots.map((slot) => {
                             const isReserved = state.reservations.some(
                                 (reservation) =>
                                     reservation.date === selectedDate &&

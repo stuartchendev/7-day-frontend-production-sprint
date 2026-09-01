@@ -5,6 +5,11 @@ export function bookingReducer(
     action: BookingAction,
 ): BookingState {
     switch (action.type) {
+        case 'availability-loaded':
+            return {
+                ...state,
+                availability: action.availability,
+            }
         case 'reserve-start':
             return {
                 ...state,
@@ -38,6 +43,7 @@ export function bookingReducer(
                 selectedTime: null,
                 bookingStatus: 'idle',
                 confirmation: null,
+                availability: null,
             }
         case 'select-time':
             return {

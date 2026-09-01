@@ -1,6 +1,3 @@
-import { getTodayDate } from "../DayFourPage"
-
-
 export type BookingStatus =
     | 'idle'
     | 'loading'
@@ -37,7 +34,7 @@ export type BookingState = {
 
 
 export const initialBookingState: BookingState = {
-    selectedDate: getTodayDate(),
+    selectedDate: '',
     selectedTime: null,
     availability: null,
     bookingStatus: 'idle',
@@ -82,4 +79,7 @@ export type BookingAction =
     }
     | {
         type: 'booking-reset'
+    } | {
+        type: 'availability-loaded'
+        availability: AvailabilitySnapshot
     }
