@@ -109,16 +109,29 @@ export function DayFourPage() {
                 ← Back to Sprint Home
             </Link>
             <header className='day-four__header'>
-                <p className="day-four__eyebrow">
-                    Day 4 · Booking reservation
-                </p>
-                <h1>
-                    Book a table, handle the uncertainty
-                </h1>
-                <p>
-                    The booking flow models loading, temporary failure, and
-                    reservation conflicts without relying on a real API.
-                </p>
+                <div className="day-four__intro">
+                    <p className="day-four__eyebrow">
+                        Day 4 · Booking reservation
+                    </p>
+                    <h1>
+                        Book a table, handle the uncertainty
+                    </h1>
+                    <p>
+                        The booking flow models loading, temporary failure, and
+                        reservation conflicts without relying on a real API.
+                    </p>
+                </div>
+
+                <aside className="day-four__demo">
+                    <p className="day-four__demo-title">Demo behavior</p>
+
+                    <ul className="day-four__demo-list">
+                        <li><span>18:00 / 20:00</span><strong>200 · Success</strong></li>
+                        <li><span>18:30</span><strong>503 · Retry</strong></li>
+                        <li><span>19:30</span><strong>409 · Conflict</strong></li>
+                        <li><span>19:00</span><strong>Unavailable</strong></li>
+                    </ul>
+                </aside>
             </header>
 
             <div className='day-four__content'>

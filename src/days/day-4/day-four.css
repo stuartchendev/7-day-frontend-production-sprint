@@ -10,8 +10,55 @@
 }
 
 .day-four__header {
-    max-width: 640px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+    gap: 48px;
+    align-items: end;
+    max-width: none;
     margin-bottom: 48px;
+}
+
+.day-four__intro {
+    max-width: 640px;
+}
+
+.day-four__demo {
+    padding: 14px 16px;
+    border: 1px solid #cfd5cc;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.54);
+}
+
+.day-four__demo-title {
+    margin: 0 0 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.day-four__demo-list {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.day-four__demo-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.75rem;
+}
+
+.day-four__demo-list span {
+    color: #59645c;
+}
+
+.day-four__demo-list strong {
+    color: #1d251f;
+    font-weight: 700;
 }
 
 .day-four__eyebrow {
@@ -243,7 +290,8 @@
     }
 
     .day-four__header {
-        margin-bottom: 32px;
+        grid-template-columns: 1fr;
+        gap: 24px;
     }
 
     .day-four__header h1 {
