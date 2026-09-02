@@ -1,6 +1,7 @@
 import { DayOnePage } from './day-1/DayOnePage'
 import { DayTwoPage } from './day-2/DayTwoPage'
 import { DayThreePage } from './day-3/DayThreePage'
+import { DayFourPage } from './day-4/DayFourPage'
 import type { SprintDay } from './types'
 
 /**
@@ -31,5 +32,13 @@ export const sprintDays: SprintDay[] = [
     summary: 'A product list sends intents upward while the page owns the cart.',
     publishedOn: '2026-08-26',
     Component: DayThreePage,
+  },
+  {
+    day: 4,
+    slug: 'day-4',
+    title: 'Booking & Reservation',
+    summary: 'A booking flow handles availability, temporary failures, and reservation conflicts.',
+    publishedOn: '2026-08-27',
+    Component: DayFourPage,
   },
 ]
