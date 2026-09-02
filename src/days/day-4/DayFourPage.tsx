@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react'
 import { bookingReducer } from './booking/bookingReducer'
-import { initialBookingState } from './booking/type'
+import { initialBookingState, demoBehaviors } from './booking/type'
 import { reserveTable } from './booking/bookingAdapter'
 import { getAvailability } from './booking/availabilityAdapter'
 import { Link } from 'react-router-dom'
@@ -37,6 +37,16 @@ export function DayFourPage() {
             reservation.date === selectedDate &&
             reservation.time === selectedTime,
     )
+
+    const resultState = state.confirmation
+        ? 'success'
+        : isConflict
+            ? 'conflict'
+            : isTemporaryError
+                ? 'temporary-error'
+                : isLoading
+                    ? 'loading'
+                    : 'idle'
 
     const handleTimeSelect = (time: string) => {
         dispatch({ type: 'booking-reset' })
@@ -130,10 +140,19 @@ export function DayFourPage() {
                     <p className="day-four__demo-title">Demo behavior</p>
 
                     <ul className="day-four__demo-list">
-                        <li><span>18:00 / 20:00</span><strong>200 · Success</strong></li>
-                        <li><span>18:30</span><strong>503 · Retry</strong></li>
-                        <li><span>19:30</span><strong>409 · Conflict</strong></li>
-                        <li><span>19:00</span><strong>Unavailable</strong></li>
+                        {demoBehaviors.map((behavior) => (
+                            <li
+                                key={behavior.label}
+                                className={
+                                    state.selectedTime && behavior.times.includes(state.selectedTime)
+                                        ? 'is-active'
+                                        : ''
+                                }
+                            >
+                                <span>{behavior.label}</span>
+                                <strong>{behavior.result}</strong>
+                            </li>
+                        ))}
                     </ul>
                 </aside>
             </header>
@@ -251,7 +270,7 @@ export function DayFourPage() {
                         </div>
                     </section>
 
-                    <section className='booking_result'>
+                    <section className={`booking_result is-${resultState}`}>
                         {!isLoading &&
                             !state.confirmation &&
                             !isConflict &&

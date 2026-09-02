@@ -83,3 +83,33 @@ export type BookingAction =
         type: 'availability-loaded'
         availability: AvailabilitySnapshot
     }
+
+
+export type DemoBehavior = {
+    times: string[]
+    label: string
+    result: string
+}
+
+export const demoBehaviors: DemoBehavior[] = [
+    {
+        times: ['18:00', '20:00'],
+        label: '18:00 / 20:00',
+        result: '200 · Success',
+    },
+    {
+        times: ['18:30'],
+        label: '18:30',
+        result: '503 · Retry',
+    },
+    {
+        times: ['19:30'],
+        label: '19:30',
+        result: '409 · Conflict',
+    },
+    {
+        times: ['19:00'],
+        label: '19:00',
+        result: 'Unavailable',
+    },
+]
