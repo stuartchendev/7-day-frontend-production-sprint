@@ -1,0 +1,372 @@
+.day-four {
+    width: min(1120px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 48px 0 96px;
+}
+
+.day-four__back-link {
+    display: inline-block;
+    margin-bottom: 48px;
+}
+
+.day-four__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+    gap: 48px;
+    align-items: end;
+    max-width: none;
+    margin-bottom: 48px;
+}
+
+.day-four__intro {
+    max-width: 640px;
+}
+
+.day-four__demo {
+    padding: 14px 16px;
+    border: 1px solid #cfd5cc;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.54);
+}
+
+.day-four__demo-title {
+    margin: 0 0 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.day-four__demo-list {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.day-four__demo-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.75rem;
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease;
+}
+
+.day-four__demo-list li.is-active {
+    background: #e4e8ef;
+    border-color: #7d899d;
+}
+
+.day-four__demo-list li.is-active strong {
+    color: #3f4d63;
+}
+
+.day-four__demo-list span {
+    color: #59645c;
+}
+
+.day-four__demo-list strong {
+    color: #1d251f;
+    font-weight: 700;
+}
+
+.day-four__eyebrow {
+    margin: 0 0 14px;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.day-four__header h1 {
+    margin: 0;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+}
+
+.day-four__header>p:last-child {
+    margin: 24px 0 0;
+    max-width: 620px;
+}
+
+.booking_form,
+.booking_reservation,
+.booking_result {
+    padding: 22px;
+    border: 1px solid #cfd5cc;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.54);
+}
+
+.day-four__content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    gap: 32px;
+    height: 520px;
+}
+
+.booking_reservation {
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.booking_result {
+    min-height: 120px;
+}
+
+.booking_result {
+    transition:
+        background-color 200ms ease,
+        border-color 200ms ease,
+        color 200ms ease;
+}
+
+.booking_result.is-success {
+    border-color: #86a68e;
+    background: #eaf3eb;
+}
+
+.booking_result.is-temporary-error {
+    border-color: #c8b27a;
+    background: #f7f3e5;
+}
+
+.booking_result.is-conflict {
+    border-color: #c99a9a;
+    background: #f7eaea;
+}
+
+.booking_result.is-success .booking_result__message {
+    animation: booking-result-enter 220ms ease-out;
+}
+
+@keyframes booking-result-enter {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.day-four__sidebar {
+    display: grid;
+    grid-template-rows: minmax(0, 2fr) minmax(0, 1fr);
+    gap: 32px;
+    min-height: 520px;
+}
+
+.booking_form {
+    display: grid;
+    gap: 16px;
+}
+
+.booking_form p {
+    margin: 0;
+    color: #59645c;
+}
+
+.booking_form>div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.booking_form__slot {
+    padding: 10px 14px;
+    border: 1px solid #aeb9b0;
+    border-radius: 8px;
+    background: #fff;
+    color: #1d251f;
+    font: inherit;
+    font-weight: 700;
+    min-width: 88px;
+    cursor: pointer;
+}
+
+.booking_form__slot-layout {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 8px;
+
+    height: 96px;
+}
+
+.booking_form__slot:hover:not(:disabled) {
+    background: #f1f5f1;
+}
+
+.booking_form__slot:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+}
+
+.booking_form__actions {
+    display: grid;
+    gap: 8px;
+    min-height: 80px;
+}
+
+.booking-form__reserve {
+    width: 100%;
+    margin-top: 4px;
+    padding: 10px 12px;
+    border: 1px solid #1d251f;
+    border-radius: 8px;
+    background: #1d251f;
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.booking-form__retry {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #aeb9b0;
+    border-radius: 8px;
+    background: #fff;
+    color: #1d251f;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.booking-form__retry:hover {
+    background: #f1f5f1;
+}
+
+.booking_form__slot.is-unavailable:disabled {
+    border-color: #d2d8d3;
+    background: #f1f3f1;
+    color: #7c897f;
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+.booking_form__slot.is-selected {
+    border-color: #86a68e;
+    background: #e5f0e6;
+    color: #315c3b;
+}
+
+.booking_form__slot.is-reserved {
+    border-color: #cfd5cc;
+    background: #eef0ed;
+    color: #59645c;
+}
+
+.booking_form__field {
+    display: grid;
+    gap: 8px;
+}
+
+.booking_form__field label,
+.booking_form__label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.booking_form input[type='date'] {
+    width: 100%;
+    max-width: 220px;
+    padding: 10px 12px;
+    border: 1px solid #aeb9b0;
+    border-radius: 8px;
+    background: #fff;
+    color: #1d251f;
+    font: inherit;
+}
+
+.booking_reservation__items {
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 20px;
+}
+
+.booking_reservation__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #dfe4df;
+}
+
+.booking_reservation__item:last-child {
+    border-bottom: 0;
+}
+
+.booking_reservation__date {
+    margin: 0;
+    color: #59645c;
+    font-size: 0.85rem;
+}
+
+.booking_reservation__time {
+    margin: 0;
+    color: #1d251f;
+    font-weight: 700;
+}
+
+.booking_result__message {
+    margin: 0 0 12px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1d251f;
+}
+
+.booking_result__info {
+    margin: 4px 0 0;
+    color: #59645c;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .day-four {
+        width: min(100% - 32px, 640px);
+        padding: 32px 0 64px;
+    }
+
+    .day-four__back-link {
+        margin-bottom: 32px;
+    }
+
+    .day-four__header {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .day-four__header h1 {
+        font-size: clamp(2.5rem, 10vw, 3.5rem);
+    }
+
+    .day-four__content {
+        grid-template-columns: 1fr;
+        height: auto;
+        gap: 24px;
+    }
+
+    .day-four__sidebar {
+        grid-template-rows: 320px 160px;
+        min-height: 480px;
+        gap: 24px;
+    }
+
+    .booking_reservation,
+    .booking_result,
+    .booking_form {
+        padding: 18px;
+    }
+}
