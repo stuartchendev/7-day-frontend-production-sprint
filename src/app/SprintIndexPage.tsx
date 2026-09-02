@@ -38,21 +38,44 @@ export function SprintIndexPage({ days }: SprintIndexPageProps) {
           </p>
         ) : (
           <ol className="sprint-index__grid">
-            {publishedDays.map((sprintDay) => (
-              <li key={sprintDay.slug}>
-                <article className="sprint-card">
-                  <p className="sprint-card__meta">
-                    Day {sprintDay.day} · {sprintDay.publishedOn}
-                  </p>
-                  <h3>{sprintDay.title}</h3>
-                  <p>{sprintDay.summary}</p>
-                  <Link to={`/${sprintDay.slug}`}>Open demo</Link>
-                </article>
-              </li>
-            ))}
+            {publishedDays.map((sprintDay) => {
+
+              return (
+
+                <li key={sprintDay.slug}>
+                  <article className="sprint-card">
+                    {/*
+                    Demo clip follows the public/videos/dayXdemo-clip.mp4 convention.
+                  */}
+                    <video
+                      className="sprint-card__video"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      aria-hidden="true"
+                    >
+                      <source
+                        src={`/videos/day${sprintDay.day}demo-clip.mp4`}
+                        type="video/mp4"
+                      />
+                    </video>
+                    <div className="sprint-card__content">
+                      <p className="sprint-card__meta">
+                        Day {sprintDay.day} · {sprintDay.publishedOn}
+                      </p>
+                      <h3>{sprintDay.title}</h3>
+                      <p>{sprintDay.summary}</p>
+                      <Link className="sprint-card__link" to={`/${sprintDay.slug}`}>Open demo</Link>
+                    </div>
+                  </article>
+                </li>
+              )
+            })}
           </ol>
-        )}
+        )
+        }
       </section>
-    </main>
+    </main >
   )
 }
