@@ -18,9 +18,9 @@ This is intentionally **not a full booking product**.
 
 ## Demo
 
-Live demo: To be added.
+Live demo: https://7dayfrontendsprint.netlify.app/day-4
 
-![Day 4 preview](...)
+[Day 4 demo video](public/video/day4demo-clip.mp4)
 
 ## User Flow
 
