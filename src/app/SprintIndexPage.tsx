@@ -76,6 +76,27 @@ export function SprintIndexPage({ days }: SprintIndexPageProps) {
         )
         }
       </section>
+      <footer className="site-footer">
+        <p>7-Day Frontend Production Sprint</p>
+
+        <nav aria-label="Footer">
+          <a
+            href="https://github.com/stuartchendev/7-day-frontend-production-sprint"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub Repo
+          </a>
+
+          <a
+            href="https://github.com/stuartchendev"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Built by Stuart 🫣🐧
+          </a>
+        </nav>
+      </footer>
     </main >
   )
 }
