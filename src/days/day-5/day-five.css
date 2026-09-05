@@ -1,0 +1,503 @@
+.day-five {
+    width: min(1320px, calc(100% - 40px));
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 48px 0 96px;
+
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 40px;
+}
+
+.day-five__intro {
+    position: sticky;
+    top: 48px;
+    align-self: start;
+}
+
+.day-five__workspace {
+    min-width: 0;
+    padding: 32px;
+    border: 1px solid #cfd5cc;
+    border-radius: 20px;
+
+    background-image:
+        linear-gradient(rgba(93, 109, 98, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(93, 109, 98, 0.08) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+.day-five__main-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+    gap: 24px;
+}
+
+.day-five__detail {
+    margin-top: 24px;
+}
+
+.day-five__header {
+    max-width: 900px;
+    margin-top: 48px;
+}
+
+.day-five__header h1 {
+    max-width: none;
+    margin: 12px 0 14px;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.045em;
+}
+
+.day-five__overview,
+.day-five__tickets,
+.day-five__activity {
+    margin-top: 38px;
+}
+
+.day-five__section-heading {
+    margin-bottom: 20px;
+}
+
+.day-five__ticket-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.day-five__ticket-viewall {
+    flex-shrink: 0;
+    padding: 7px 12px;
+    border: 1px solid #cfd5cc;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #5d6d62;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        color 160ms ease;
+}
+
+.day-five__ticket-viewall:hover {
+    border-color: #aeb9af;
+    background: rgba(255, 255, 255, 0.9);
+    color: #3f4b43;
+}
+
+
+.day-five__section-heading h2 {
+    margin: 10px 0 0;
+    font-size: 1.4rem;
+}
+
+.day-five__status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.day-five__status-card {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid #cfd5cc;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.72);
+
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.day-five__status-card--selected {
+    border-color: #7f9184;
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.day-five__status-card--assigned.day-five__status-card--selected p,
+.day-five__status-card--assigned.day-five__status-card--selected strong {
+    color: #40516a;
+}
+
+.day-five__status-card--processing.day-five__status-card--selected p,
+.day-five__status-card--processing.day-five__status-card--selected strong {
+    color: #73551f;
+}
+
+.day-five__status-card--blocked.day-five__status-card--selected p,
+.day-five__status-card--blocked.day-five__status-card--selected strong {
+    color: #7d4038;
+}
+
+.day-five__status-card--resolved.day-five__status-card--selected p,
+.day-five__status-card--resolved.day-five__status-card--selected strong {
+    color: #3f654d;
+}
+
+.day-five__status-card--assigned.day-five__status-card--selected {
+    border-color: #40516a;
+}
+
+.day-five__status-card--processing.day-five__status-card--selected {
+    border-color: #73551f;
+}
+
+.day-five__status-card--blocked.day-five__status-card--selected {
+    border-color: #7d4038;
+}
+
+.day-five__status-card--resolved.day-five__status-card--selected {
+    border-color: #3f654d;
+}
+
+.day-five__status-card:hover {
+    transform: translateY(-2px);
+    border-color: #aeb9af;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.day-five__status-card p {
+    margin: 0;
+    color: #59645c;
+    font-size: 0.9rem;
+}
+
+.day-five__status-card strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 1.65rem;
+    line-height: 1;
+}
+
+.day-five__ticket-list {
+    display: grid;
+    gap: 12px;
+}
+
+.day-five__ticket-card {
+    font: inherit;
+    text-align: left;
+    padding: 20px 22px;
+    border: 1px solid #cfd5cc;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.72);
+}
+
+
+.day-five__ticket-card p {
+    margin: 0;
+    color: #59645c;
+    line-height: 1.55;
+}
+
+.day-five__ticket-card {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 22px;
+    border: 1px solid #cfd5cc;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.day-five__ticket-id {
+    margin: 0 0 6px;
+    color: #5d6d62;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.day-five__ticket-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+}
+
+.day-five__ticket-card p:last-child {
+    margin: 0;
+    color: #59645c;
+    line-height: 1.55;
+}
+
+.day-five__ticket-card>span {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.day-five__activity {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.day-five__activity-list {
+    display: grid;
+    gap: 0;
+
+}
+
+.day-five__activity-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #cfd5cc;
+}
+
+.day-five__activity-item:first-child {
+    padding-top: 0;
+}
+
+.day-five__activity-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.day-five__activity-item strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #5d6d62;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+}
+
+.day-five__activity-item p {
+    margin: 0;
+    color: #59645c;
+}
+
+.day-five__activity-item time {
+    flex-shrink: 0;
+    color: #7c897f;
+    font-size: 0.8rem;
+}
+
+.day-five__detail-header {
+    margin-bottom: 28px;
+}
+
+.day-five__detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.day-five__detail-meta .day-five__ticket-id {
+    margin: 0;
+}
+
+.day-five__detail-header h2 {
+    margin: 10px 0 0;
+    font-size: 1.8rem;
+    line-height: 1.1;
+}
+
+.day-five__detail-header>span {
+    flex-shrink: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+
+.day-five__status-pill {
+    flex-shrink: 0;
+    padding: 7px 11px;
+    border-radius: 999px;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: capitalize;
+}
+
+.day-five__status-pill--assigned {
+    background: #d5dfeb;
+    color: #40516a;
+}
+
+.day-five__status-pill--processing {
+    background: #ead9ad;
+    color: #73551f;
+}
+
+.day-five__status-pill--blocked {
+    background: #e8c7c2;
+    color: #7d4038;
+}
+
+.day-five__status-pill--resolved {
+    background: #c9dfd0;
+    color: #3f654d;
+}
+
+.day-five__eyebrow {
+    margin: 0;
+
+    color: #5d6d62;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.day-five__report>p:last-child {
+    margin: 0;
+    max-width: 760px;
+    font-size: 1.2rem;
+    line-height: 1.65;
+}
+
+.day-five__handling {
+    width: min(100%, 380px);
+    margin-top: 28px;
+    padding: 16px 18px;
+
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.day-five__detail-history-heading {
+    margin-bottom: 18px;
+}
+
+.day-five__handling>p:last-child {
+    margin: 8px 0 0;
+
+    color: #3f4b43;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.day-five__detail-actions {
+    margin-top: 28px;
+}
+
+.day-five__detail-actions>div {
+    display: flex;
+    gap: 10px;
+}
+
+.day-five__detail-actions button {
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 10px;
+
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.day-five__detail-actions button:first-child {
+    background: #c9dfd0;
+    color: #3f654d;
+}
+
+.day-five__detail-actions button:last-child {
+    background: #e8c7c2;
+    color: #7d4038;
+}
+
+.day-five__history-list {
+    display: grid;
+    gap: 10px;
+}
+
+.day-five__detail-history {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid #cfd5cc;
+}
+
+.day-five__history-item {
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 10px auto minmax(0, 1fr);
+    gap: 10px;
+    align-items: baseline;
+}
+
+.day-five__history-marker {
+    position: relative;
+    align-self: stretch;
+}
+
+.day-five__history-marker span {
+    position: absolute;
+    top: 0.45em;
+    left: 50%;
+
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+
+    background: #5d6d62;
+    transform: translateX(-50%);
+}
+
+.day-five__history-item:not(:last-child) .day-five__history-marker::after {
+    content: "";
+
+    position: absolute;
+    top: calc(0.45em + 6px);
+    bottom: -10px;
+    left: 50%;
+
+    width: 1px;
+    background: #cfd5cc;
+}
+
+
+.day-five__history-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.day-five__history-meta time {
+    color: #7c897f;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.day-five__history-meta strong {
+    padding: 4px 7px;
+    border-radius: 6px;
+    background: rgba(93, 109, 98, 0.08);
+
+    color: #5d6d62;
+    font-size: 0.78rem;
+}
+
+.day-five__history-item p {
+    margin: 0;
+    color: #59645c;
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+.day-five__detail-back {
+    margin-bottom: 18px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #5d6d62;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.day-five__detail-back:hover {
+    color: #3f4b43;
+}

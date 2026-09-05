@@ -14,12 +14,12 @@ describe('ticketReducer', () => {
         };
 
         const nextState = ticketReducer(
-            assignedTicket,
-            { type: 'start' }
+            [assignedTicket],
+            { type: 'start', ticketId: 'T-001' }
         );
 
-        expect(nextState.status).toBe('processing');
-        expect(nextState.handling).toBe(
+        expect(nextState[0].status).toBe('processing');
+        expect(nextState[0].handling).toBe(
             'Investigating the reported issue'
         );
     });
@@ -34,13 +34,22 @@ describe('ticketReducer', () => {
             handling: 'Investigating the reported issue',
             history: [],
         }
+        const otherTicket = {
+            id: 'T-002',
+            title: 'Printer unavailable',
+            report: 'The printer is not responding.',
+            status: 'processing' as const,
+            handling: 'Checking the printer connection',
+            history: [],
+        };
 
         const newState = ticketReducer(
-            processingTicket,
-            { type: 'resolve' }
-        )
-        expect(newState.status).toBe('resolved');
-        expect(newState.handling).toBe('Issue resolved');
+            [processingTicket, otherTicket],
+            { type: 'resolve', ticketId: 'T-001' }
+        );
+
+        expect(newState[0].status).toBe('resolved');
+        expect(newState[0].handling).toBe('Issue resolved')
     })
 
     // processing -> block -> blocked
@@ -54,15 +63,21 @@ describe('ticketReducer', () => {
             history: [],
         }
         const newState = ticketReducer(
-            processingTicket,
+            [processingTicket],
             {
                 type: 'block',
+                ticketId: 'T-001',
                 blockReason: 'Waiting for maintenance information',
             }
-        )
-        expect(newState.status).toBe('blocked');
-        expect(newState.handling).toBe('Waiting for the required information');
-        expect(newState.blockReason).toBe('Waiting for maintenance information');
+        );
+
+        expect(newState[0].status).toBe('blocked');
+        expect(newState[0].handling).toBe(
+            'Waiting for the required information'
+        );
+        expect(newState[0].blockReason).toBe(
+            'Waiting for maintenance information'
+        );
     })
 
     // start-> block -> (blocked -> processing -> resume)
@@ -90,20 +105,20 @@ describe('ticketReducer', () => {
         };
 
         const newState = ticketReducer(
-            blockedTicket,
-            { type: 'resume' }
+            [blockedTicket],
+            { type: 'resume', ticketId: 'T-001' }
         );
 
-        expect(newState.status).toBe('processing');
-        expect(newState.handling).toBe('Resuming investigation');
+        expect(newState[0].status).toBe('processing');
+        expect(newState[0].handling).toBe('Resuming investigation');
 
-        expect(newState.history).toHaveLength(3);
-        expect(newState.history[0].action).toBe('start');
-        expect(newState.history[1].action).toBe('block');
-        expect(newState.history[2].action).toBe('resume');
+        expect(newState[0].history).toHaveLength(3);
+        expect(newState[0].history[0].action).toBe('start');
+        expect(newState[0].history[1].action).toBe('block');
+        expect(newState[0].history[2].action).toBe('resume');
 
-        expect(newState.history[2].note).toBe(
-            'Waiting for maintenance information'
+        expect(newState[0].history[2].note).toBe(
+            'Resumed after block: Waiting for maintenance information'
         );
     })
 

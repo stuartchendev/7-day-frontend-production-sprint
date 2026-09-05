@@ -32,10 +32,10 @@ export type Ticket = BaseTicket & (
 );
 
 export type TicketAction =
-    | { type: 'start' }
-    | { type: 'resolve' }
-    | { type: 'block'; blockReason: string }
-    | { type: 'resume' };
+    | { type: 'start'; ticketId: string }
+    | { type: 'resolve'; ticketId: string }
+    | { type: 'block'; ticketId: string; blockReason: string }
+    | { type: 'resume'; ticketId: string };
 
 type TicketTransitions = {
     assigned: ['start'];
