@@ -10,13 +10,6 @@ export function ticketReducer(
         }
 
         switch (action.type) {
-            case 'start':
-                return {
-                    ...ticket,
-                    status: 'processing',
-                    handling: 'Investigating the reported issue',
-                };
-
             case 'resolve':
                 return {
                     ...ticket,
@@ -55,7 +48,6 @@ export function ticketReducer(
                     ],
                 };
             }
-
             default:
                 return ticket;
         }

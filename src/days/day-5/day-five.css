@@ -67,30 +67,6 @@
     gap: 20px;
 }
 
-.day-five__ticket-viewall {
-    flex-shrink: 0;
-    padding: 7px 12px;
-    border: 1px solid #cfd5cc;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.72);
-    color: #5d6d62;
-    font: inherit;
-    font-size: 0.78rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition:
-        border-color 160ms ease,
-        background 160ms ease,
-        color 160ms ease;
-}
-
-.day-five__ticket-viewall:hover {
-    border-color: #aeb9af;
-    background: rgba(255, 255, 255, 0.9);
-    color: #3f4b43;
-}
-
-
 .day-five__section-heading h2 {
     margin: 10px 0 0;
     font-size: 1.4rem;
@@ -112,16 +88,16 @@
     font: inherit;
     text-align: left;
     cursor: pointer;
+
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
 }
 
 .day-five__status-card--selected {
     border-color: #7f9184;
     background: rgba(255, 255, 255, 0.92);
-}
-
-.day-five__status-card--assigned.day-five__status-card--selected p,
-.day-five__status-card--assigned.day-five__status-card--selected strong {
-    color: #40516a;
 }
 
 .day-five__status-card--processing.day-five__status-card--selected p,
@@ -137,10 +113,6 @@
 .day-five__status-card--resolved.day-five__status-card--selected p,
 .day-five__status-card--resolved.day-five__status-card--selected strong {
     color: #3f654d;
-}
-
-.day-five__status-card--assigned.day-five__status-card--selected {
-    border-color: #40516a;
 }
 
 .day-five__status-card--processing.day-five__status-card--selected {
@@ -180,30 +152,34 @@
 }
 
 .day-five__ticket-card {
-    font: inherit;
-    text-align: left;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
     padding: 20px 22px;
     border: 1px solid #cfd5cc;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.72);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 160ms ease,
+        background 160ms ease,
+        transform 160ms ease;
 }
 
+.day-five__ticket-card:hover {
+    transform: translateY(-1px);
+    border-color: #aeb9af;
+    background: rgba(255, 255, 255, 0.9);
+}
 
 .day-five__ticket-card p {
     margin: 0;
     color: #59645c;
     line-height: 1.55;
-}
-
-.day-five__ticket-card {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 20px 22px;
-    border: 1px solid #cfd5cc;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.72);
 }
 
 .day-five__ticket-id {
@@ -230,6 +206,13 @@
     flex-shrink: 0;
     font-size: 0.85rem;
     font-weight: 700;
+}
+
+.day-five__history-empty {
+    margin: 0;
+    color: #7c897f;
+    font-size: 0.88rem;
+    line-height: 1.45;
 }
 
 .day-five__activity {
@@ -317,11 +300,6 @@
     font-weight: 700;
     line-height: 1;
     text-transform: capitalize;
-}
-
-.day-five__status-pill--assigned {
-    background: #d5dfeb;
-    color: #40516a;
 }
 
 .day-five__status-pill--processing {

@@ -45,21 +45,31 @@ export function DayFivePage() {
         initialTickets
     );
     const [selectedStatus, setSelectedStatus] =
-        useState<Ticket['status'] | null>(null);
+        useState<Ticket['status'] | 'all'>('all');
 
     const [selectedTicket, setSelectedTicket] =
         useState<string | null>(null);
 
-    const filteredTickets = selectedStatus
-        ? tickets.filter((ticket) => ticket.status === selectedStatus)
-        : tickets;
+    const filteredTickets =
+        selectedStatus === 'all'
+            ? tickets
+            : tickets.filter((ticket) => ticket.status === selectedStatus);
 
-    const withCountStatus = statuses.map((status) => ({
-        ...status,
-        count: tickets.filter(
-            (ticket) => ticket.status === status.status
-        ).length,
-    }));
+    const allStatus = {
+        label: 'All',
+        status: 'all' as const,
+        count: tickets.length,
+    };
+
+    const withCountStatus = [
+        allStatus,
+        ...statuses.map((status) => ({
+            ...status,
+            count: tickets.filter(
+                (ticket) => ticket.status === status.status
+            ).length,
+        })),
+    ];
 
     const selectedTicketData = tickets.find((ticket) => ticket.id === selectedTicket)
 
@@ -168,7 +178,7 @@ export function DayFivePage() {
                                     <div>
                                         <button
                                             type="button"
-                                            onClick={() => handleTicketAction({ type: 'resolve' })}>Resolve</button>
+                                            onClick={() => handleTicketAction({ type: 'resolve', ticketId: selectedTicketData.id })}>Resolve</button>
                                         <button type="button">Block</button>
                                     </div>
                                 </div>
@@ -180,20 +190,26 @@ export function DayFivePage() {
                                 </div>
 
                                 <div className="day-five__history-list">
-                                    {selectedTicketData.history.map((entry) => (
-                                        <div className="day-five__history-item" key={entry.id}>
-                                            <div className="day-five__history-marker">
-                                                <span />
-                                            </div>
+                                    {selectedTicketData.history.length > 0 ? (
+                                        selectedTicketData.history.map((entry) => (
+                                            <div className="day-five__history-item" key={entry.id}>
+                                                <div className="day-five__history-marker">
+                                                    <span />
+                                                </div>
 
-                                            <div className="day-five__history-meta">
-                                                <time>{entry.timestamp}</time>
-                                                <strong>{entry.action}</strong>
-                                            </div>
+                                                <div className="day-five__history-meta">
+                                                    <time>{entry.timestamp}</time>
+                                                    <strong>{entry.action}</strong>
+                                                </div>
 
-                                            <p>{entry.note}</p>
-                                        </div>
-                                    ))}
+                                                <p>{entry.note}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="day-five__history-empty">
+                                            No transition history yet.
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </section>
@@ -205,13 +221,6 @@ export function DayFivePage() {
                                     <p className="day-five__eyebrow">Ticket list</p>
                                     <h2>Maintenance requests</h2>
                                 </div>
-                                <button
-                                    className="day-five__ticket-viewall"
-                                    type="button"
-                                    onClick={() => setSelectedStatus(null)}
-                                >
-                                    View all
-                                </button>
                             </div>
                             <div className="day-five__ticket-list">
                                 {filteredTickets.map((ticket) => (

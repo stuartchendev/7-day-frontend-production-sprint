@@ -1,6 +1,6 @@
 export type TicketHistoryEntry = {
     id: string;
-    action: string;
+    action: 'resolve' | 'block' | 'resume';
     timestamp: string;
     note?: string;
 };
@@ -13,10 +13,7 @@ type BaseTicket = {
 };
 
 export type Ticket = BaseTicket & (
-    | {
-        status: 'assigned';
-    }
-    | {
+    {
         status: 'processing';
         handling: string;
     }
@@ -32,21 +29,23 @@ export type Ticket = BaseTicket & (
 );
 
 export type TicketAction =
-    | { type: 'start'; ticketId: string }
     | { type: 'resolve'; ticketId: string }
     | { type: 'block'; ticketId: string; blockReason: string }
     | { type: 'resume'; ticketId: string };
 
 type TicketTransitions = {
-    assigned: ['start'];
     processing: ['resolve', 'block'];
     blocked: ['resume'];
     resolved: [];
 };
 
 export const ticketTransitions = {
-    assigned: ['start'],
     processing: ['resolve', 'block'],
     blocked: ['resume'],
     resolved: [],
 } satisfies TicketTransitions;
+
+export type Statuses = {
+    label: string;
+    status: Ticket['status'];
+}

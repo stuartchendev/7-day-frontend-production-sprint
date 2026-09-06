@@ -1,19 +1,13 @@
-import type { Ticket } from "./type";
+import type { Ticket, Statuses } from "./type";
 
 export const initialTickets: Ticket[] = [
     {
         id: 'T-001',
         title: 'Air conditioner issue',
-        status: 'assigned',
+        status: 'processing',
         report: 'The air conditioner is not cooling.',
-        history: [
-            {
-                id: 'history-1',
-                action: 'Assigned',
-                timestamp: '08:42',
-                note: 'Ticket assigned to maintenance team',
-            },
-        ],
+        handling: 'Investigating the reported issue',
+        history: [],
     },
     {
         id: 'T-002',
@@ -21,20 +15,7 @@ export const initialTickets: Ticket[] = [
         status: 'processing',
         report: 'The printer is not responding when users try to print.',
         handling: 'Checking the printer connection and power status',
-        history: [
-            {
-                id: 'history-1',
-                action: 'Assigned',
-                timestamp: '09:12',
-                note: 'Ticket assigned to maintenance team',
-            },
-            {
-                id: 'history-2',
-                action: 'Started processing',
-                timestamp: '09:24',
-                note: 'Investigation started',
-            },
-        ],
+        history: [],
     },
     {
         id: 'T-003',
@@ -46,19 +27,7 @@ export const initialTickets: Ticket[] = [
         history: [
             {
                 id: 'history-1',
-                action: 'Assigned',
-                timestamp: '08:56',
-                note: 'Ticket assigned to maintenance team',
-            },
-            {
-                id: 'history-2',
-                action: 'Started processing',
-                timestamp: '09:18',
-                note: 'Network issue investigation started',
-            },
-            {
-                id: 'history-3',
-                action: 'Blocked',
+                action: 'block',
                 timestamp: '09:47',
                 note: 'Waiting for network equipment replacement',
             },
@@ -73,32 +42,16 @@ export const initialTickets: Ticket[] = [
         history: [
             {
                 id: 'history-1',
-                action: 'Assigned',
+                action: 'resolve',
                 timestamp: '07:35',
                 note: 'Ticket assigned to maintenance team',
-            },
-            {
-                id: 'history-2',
-                action: 'Started processing',
-                timestamp: '07:48',
-                note: 'Faulty lighting fixture identified',
-            },
-            {
-                id: 'history-3',
-                action: 'Resolved',
-                timestamp: '08:16',
-                note: 'Lighting fixture replaced successfully',
             },
         ],
     },
 ];
 
-export const statuses: {
-    label: string;
-    status: Ticket['status'];
-}[] = [
-        { label: 'Assigned', status: 'assigned' },
-        { label: 'Processing', status: 'processing' },
-        { label: 'Blocked', status: 'blocked' },
-        { label: 'Resolved', status: 'resolved' },
-    ];
+export const statuses: Statuses[] = [
+    { label: 'Processing', status: 'processing' },
+    { label: 'Blocked', status: 'blocked' },
+    { label: 'Resolved', status: 'resolved' },
+];
