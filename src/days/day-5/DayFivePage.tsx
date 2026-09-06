@@ -25,6 +25,27 @@ function getActivityLabel(action: TicketHistoryEntry['action']) {
     }
 }
 
+function getHistoryLabel(action: TicketHistoryEntry['action']) {
+    switch (action) {
+        case 'block':
+            return 'Blocked';
+        case 'resume':
+            return 'Resumed';
+        case 'resolve':
+            return 'Resolved';
+    }
+}
+
+function formatHistoryTimestamp(timestamp: string) {
+    return new Date(timestamp).toLocaleString('sv-SE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+}
+
 export function DayFivePage() {
     const [tickets, dispatch] = useReducer(
         ticketReducer,
@@ -179,62 +200,63 @@ export function DayFivePage() {
                                 <div className="day-five__handling">
                                     <p className="day-five__eyebrow">Current handling</p>
                                     <p>{selectedTicketData.handling}</p>
+
+                                    {selectedTicketData.status === 'blocked' && (
+                                        <div className="day-five__handling-detail">
+                                            <span className="day-five__eyebrow">Latest block reason</span>
+                                            <p>{selectedTicketData.blockReason}</p>
+                                        </div>
+                                    )}
                                 </div>
 
-                                {selectedTicketData.status === 'blocked' && (
-                                    <div className="day-five__detail-field">
-                                        <span className="day-five__detail-label">Block reason</span>
-                                        <p>{selectedTicketData.blockReason}</p>
-                                    </div>
-                                )}
-
                                 <div className="day-five__detail-actions">
-                                    {selectedTicketData.status === 'processing' ? (
-                                        <>
-                                            <button
-                                                onClick={() =>
-                                                    handleTicketAction({
-                                                        type: 'resolve',
-                                                        ticketId: selectedTicketData.id,
-                                                    })
-                                                }
-                                            >
-                                                Resolve
-                                            </button>
+                                    {!isBlocking &&
+                                        (selectedTicketData.status === 'processing' ? (
+                                            <>
+                                                <button
+                                                    onClick={() =>
+                                                        handleTicketAction({
+                                                            type: 'resolve',
+                                                            ticketId: selectedTicketData.id,
+                                                        })
+                                                    }
+                                                >
+                                                    Resolve
+                                                </button>
 
-                                            {!isBlocking && (
+                                                {!isBlocking && (
+                                                    <button
+                                                        onClick={() => setIsBlocking(true)}
+                                                    >
+                                                        Block
+                                                    </button>
+                                                )}
+                                            </>
+                                        ) : selectedTicketData.status === 'blocked' ? (
+                                            <>
                                                 <button
-                                                    onClick={() => setIsBlocking(true)}
+                                                    onClick={() =>
+                                                        handleTicketAction({
+                                                            type: 'resume',
+                                                            ticketId: selectedTicketData.id,
+                                                        })
+                                                    }
                                                 >
-                                                    Block
+                                                    Resume
                                                 </button>
-                                            )}
-                                        </>
-                                    ) : selectedTicketData.status === 'blocked' ? (
-                                        <>
-                                            <button
-                                                onClick={() =>
-                                                    handleTicketAction({
-                                                        type: 'resume',
-                                                        ticketId: selectedTicketData.id,
-                                                    })
-                                                }
-                                            >
-                                                Resume
-                                            </button>
-                                            {!isBlocking && (
-                                                <button
-                                                    onClick={() => setIsBlocking(true)}
-                                                >
-                                                    Block
-                                                </button>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <p className="day-five__resolve-message">✓ Ticket resolved</p>
-                                        </>
-                                    )}
+                                                {!isBlocking && (
+                                                    <button
+                                                        onClick={() => setIsBlocking(true)}
+                                                    >
+                                                        Block
+                                                    </button>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p className="day-five__resolve-message">✓ Ticket resolved</p>
+                                            </>
+                                        ))}
                                     {isBlocking && (
                                         <div className="day-five__block-panel">
                                             <p className="day-five__eyebrow">Block ticket</p>
@@ -298,13 +320,20 @@ export function DayFivePage() {
                                                     <span />
                                                 </div>
 
-                                                <div className="day-five__history-meta">
-                                                    <time>{entry.timestamp}</time>
-                                                    <strong>{entry.action}</strong>
-                                                </div>
+                                                <div className="day-five__history-content">
+                                                    <div className="day-five__history-meta">
+                                                        <time>{formatHistoryTimestamp(entry.timestamp)}</time>
+                                                        <strong>{getHistoryLabel(entry.action)}</strong>
+                                                    </div>
 
-                                                <p>{entry.action === 'resume' ?
-                                                    `Block resolved: ${entry.note}` : entry.note}</p>
+                                                    {entry.note && (
+                                                        <p>
+                                                            {entry.action === 'resume'
+                                                                ? `Block resolved: ${entry.note}`
+                                                                : entry.note}
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </div>
                                         ))
                                     ) : (
@@ -361,7 +390,7 @@ export function DayFivePage() {
                                         <p>{getActivityLabel(activity.action)}</p>
                                     </div>
 
-                                    <time>{activity.timestamp}</time>
+                                    <time>{formatHistoryTimestamp(activity.timestamp)}</time>
                                 </div>
                             ))}
                         </div>

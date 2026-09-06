@@ -23,4 +23,5 @@ export function getRecentActivity(tickets: Ticket[]): RecentActivity[] {
                 new Date(b.timestamp).getTime() -
                 new Date(a.timestamp).getTime()
         )
+        .slice(0, 4);
 }

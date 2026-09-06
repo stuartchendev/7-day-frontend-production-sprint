@@ -26,9 +26,9 @@ export const initialTickets: Ticket[] = [
         blockReason: 'Waiting for network equipment replacement',
         history: [
             {
-                id: 'history-1',
+                id: 'T-003',
                 action: 'block',
-                timestamp: '09:47',
+                timestamp: '2026-09-04T10:30:00Z',
                 note: 'Waiting for network equipment replacement',
             },
         ],
@@ -41,9 +41,9 @@ export const initialTickets: Ticket[] = [
         handling: 'Replaced the faulty lighting fixture',
         history: [
             {
-                id: 'history-1',
+                id: 'T-004',
                 action: 'resolve',
-                timestamp: '07:35',
+                timestamp: '2026-09-05T11:30:00Z',
                 note: 'Ticket assigned to maintenance team',
             },
         ],

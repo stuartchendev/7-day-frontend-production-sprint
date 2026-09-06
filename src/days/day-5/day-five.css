@@ -343,6 +343,23 @@
     background: rgba(255, 255, 255, 0.72);
 }
 
+.day-five__handling-detail {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #cfd5cc;
+}
+
+.day-five__handling-detail .day-five__eyebrow {
+    margin: 0;
+}
+
+.day-five__handling-detail>p:last-child {
+    margin: 8px 0 0;
+    color: #3f4b43;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
 .day-five__detail-history-heading {
     margin-bottom: 18px;
 }
@@ -356,33 +373,93 @@
 }
 
 .day-five__detail-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
     margin-top: 28px;
 }
 
-.day-five__detail-actions>div {
-    display: flex;
-    gap: 10px;
-}
-
-.day-five__detail-actions button {
+.day-five__detail-actions>button {
     padding: 9px 16px;
     border: 0;
     border-radius: 10px;
-
     font: inherit;
     font-size: 0.85rem;
     font-weight: 700;
     cursor: pointer;
 }
 
-.day-five__detail-actions button:first-child {
+.day-five__detail-actions>button:first-child {
     background: #c9dfd0;
     color: #3f654d;
 }
 
-.day-five__detail-actions button:last-child {
+.day-five__detail-actions>button:last-child {
     background: #e8c7c2;
     color: #7d4038;
+}
+
+/* block panel  */
+.day-five__block-panel {
+    flex: 0 0 100%;
+    display: grid;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 16px 18px;
+    border: 1px solid #cfd5cc;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.day-five__block-panel label {
+    color: #59645c;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.day-five__block-panel textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 10px 12px;
+    border: 1px solid #cfd5cc;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    font: inherit;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    resize: vertical;
+}
+
+.day-five__block-panel>div {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.day-five__block-panel button {
+    padding: 9px 16px;
+    border: 0;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.day-five__block-panel button:first-child {
+    background: #c9dfd0;
+    color: #3f654d;
+}
+
+.day-five__block-panel button:last-child {
+    background: #e8c7c2;
+    color: #7d4038;
+}
+
+.day-five__block-panel button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .day-five__history-list {
@@ -402,7 +479,7 @@
     display: grid;
     grid-template-columns: 10px auto minmax(0, 1fr);
     gap: 10px;
-    align-items: baseline;
+    align-items: start;
 }
 
 .day-five__history-marker {
@@ -435,6 +512,10 @@
     background: #cfd5cc;
 }
 
+.day-five__history-content {
+    min-width: 0;
+}
+
 
 .day-five__history-meta {
     display: flex;
@@ -458,10 +539,11 @@
 }
 
 .day-five__history-item p {
-    margin: 0;
+    margin: 8px 0 0;
     color: #59645c;
     font-size: 0.88rem;
-    line-height: 1.45;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 }
 
 .day-five__detail-back {
