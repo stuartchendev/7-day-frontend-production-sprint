@@ -38,7 +38,7 @@ export const initialTickets: Ticket[] = [
         title: 'Office lighting failure',
         status: 'resolved',
         report: 'The lights in the meeting room are not working.',
-        handling: 'Replaced the faulty lighting fixture',
+        handling: 'Issue resolved',
         history: [
             {
                 id: 'T-004',
