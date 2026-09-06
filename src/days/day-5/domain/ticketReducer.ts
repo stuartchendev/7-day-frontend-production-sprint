@@ -15,6 +15,14 @@ export function ticketReducer(
                     ...ticket,
                     status: 'resolved',
                     handling: 'Issue resolved',
+                    history: [
+                        ...ticket.history,
+                        {
+                            id: crypto.randomUUID(),
+                            action: 'resolve',
+                            timestamp: new Date().toISOString(),
+                        },
+                    ],
                 };
 
             case 'block':
@@ -23,6 +31,15 @@ export function ticketReducer(
                     status: 'blocked',
                     handling: 'Waiting for the required information',
                     blockReason: action.blockReason,
+                    history: [
+                        ...ticket.history,
+                        {
+                            id: crypto.randomUUID(),
+                            action: 'block',
+                            timestamp: new Date().toISOString(),
+                            note: action.blockReason,
+                        },
+                    ],
                 };
 
             case 'resume': {
@@ -43,7 +60,7 @@ export function ticketReducer(
                             id: crypto.randomUUID(),
                             action: 'resume',
                             timestamp: new Date().toISOString(),
-                            note: `Resumed after block: ${blockReason}`,
+                            note: blockReason,
                         },
                     ],
                 };

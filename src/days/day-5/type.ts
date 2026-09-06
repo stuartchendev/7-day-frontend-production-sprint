@@ -35,13 +35,13 @@ export type TicketAction =
 
 type TicketTransitions = {
     processing: ['resolve', 'block'];
-    blocked: ['resume'];
+    blocked: ['resume', 'block'],
     resolved: [];
 };
 
 export const ticketTransitions = {
     processing: ['resolve', 'block'],
-    blocked: ['resume'],
+    blocked: ['resume', 'block'],
     resolved: [],
 } satisfies TicketTransitions;
 

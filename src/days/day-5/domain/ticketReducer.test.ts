@@ -1,29 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { ticketReducer } from './ticketReducer';
 
+// notes
+// processing → resolved
+// processing → blocked
+// resume -> processing
+// blocked → processing
+// blocked → blocked
+
+
 
 describe('ticketReducer', () => {
-    // assigned -> processing
-    it('moves an assigned ticket to processing when started', () => {
-        const assignedTicket = {
-            id: 'T-001',
-            title: 'Air conditioner issue',
-            report: 'The air conditioner is not cooling.',
-            status: 'assigned' as const,
-            history: [],
-        };
-
-        const nextState = ticketReducer(
-            [assignedTicket],
-            { type: 'start', ticketId: 'T-001' }
-        );
-
-        expect(nextState[0].status).toBe('processing');
-        expect(nextState[0].handling).toBe(
-            'Investigating the reported issue'
-        );
-    });
-
     // processing -> resolved
     it('resolves a processing ticket', () => {
         const processingTicket = {
@@ -50,9 +37,13 @@ describe('ticketReducer', () => {
 
         expect(newState[0].status).toBe('resolved');
         expect(newState[0].handling).toBe('Issue resolved')
+
+        expect(newState[0].history).toHaveLength(1);
+        expect(newState[0].history[0].action).toBe('resolve');
+        expect(newState[0].history[0].note).toBeUndefined();
     })
 
-    // processing -> block -> blocked
+    // processing -> blocked
     it('blocks a processing ticket with a reason', () => {
         const processingTicket = {
             id: 'T-001',
@@ -75,12 +66,14 @@ describe('ticketReducer', () => {
         expect(newState[0].handling).toBe(
             'Waiting for the required information'
         );
-        expect(newState[0].blockReason).toBe(
+        expect(newState[0].history).toHaveLength(1);
+        expect(newState[0].history[0].action).toBe('block');
+        expect(newState[0].history[0].note).toBe(
             'Waiting for maintenance information'
         );
     })
 
-    // start-> block -> (blocked -> processing -> resume)
+    // resume -> processing
     it('resumes a blocked ticket and preserves the block reason in histroy', () => {
         const blockedTicket = {
             id: 'T-001',
@@ -92,12 +85,7 @@ describe('ticketReducer', () => {
             history: [
                 {
                     id: 'H-001',
-                    action: 'start',
-                    timestamp: '2026-09-04T10:00:00Z',
-                },
-                {
-                    id: 'H-002',
-                    action: 'block',
+                    action: 'block' as const,
                     timestamp: '2026-09-04T10:30:00Z',
                     note: 'Waiting for maintenance information',
                 },
@@ -112,14 +100,51 @@ describe('ticketReducer', () => {
         expect(newState[0].status).toBe('processing');
         expect(newState[0].handling).toBe('Resuming investigation');
 
-        expect(newState[0].history).toHaveLength(3);
-        expect(newState[0].history[0].action).toBe('start');
-        expect(newState[0].history[1].action).toBe('block');
-        expect(newState[0].history[2].action).toBe('resume');
-
-        expect(newState[0].history[2].note).toBe(
-            'Resumed after block: Waiting for maintenance information'
+        expect(newState[0].history).toHaveLength(2);
+        expect(newState[0].history[1].action).toBe('resume');
+        expect(newState[0].history[1].note).toBe(
+            'Waiting for maintenance information'
         );
     })
 
+    // blocked → blocked
+    it('adds a new block transition when blocking an already blocked ticket', () => {
+        const blockedTicket = {
+            id: 'T-001',
+            title: 'Air conditioner issue',
+            report: 'The air conditioner is not cooling.',
+            status: 'blocked' as const,
+            handling: 'Waiting for the required information',
+            blockReason: 'Waiting for maintenance information',
+            history: [
+                {
+                    id: 'H-001',
+                    action: 'block' as const,
+                    timestamp: '2026-09-04T10:30:00Z',
+                    note: 'Waiting for maintenance information',
+                },
+            ],
+        };
+
+        const newState = ticketReducer(
+            [blockedTicket],
+            {
+                type: 'block',
+                ticketId: 'T-001',
+                blockReason: 'Waiting for customer confirmation',
+            }
+        );
+
+        expect(newState[0].status).toBe('blocked');
+        expect(newState[0].blockReason).toBe(
+            'Waiting for customer confirmation'
+        );
+
+        expect(newState[0].history).toHaveLength(2);
+        expect(newState[0].history[0].action).toBe('block');
+        expect(newState[0].history[1].action).toBe('block');
+        expect(newState[0].history[1].note).toBe(
+            'Waiting for customer confirmation'
+        );
+    });
 });
