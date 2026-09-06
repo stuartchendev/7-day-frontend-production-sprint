@@ -561,3 +561,86 @@
 .day-five__detail-back:hover {
     color: #3f4b43;
 }
+
+@media (max-width: 1024px) {
+    .day-five {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .day-five__intro {
+        position: static;
+    }
+
+    .day-five__main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .day-five__status-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 720px) {
+    .day-five {
+        width: min(100% - 24px, 1320px);
+        padding: 28px 0 64px;
+    }
+
+    .day-five__workspace {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .day-five__header {
+        margin-top: 32px;
+    }
+
+    .day-five__header h1 {
+        font-size: clamp(2rem, 10vw, 3rem);
+    }
+
+    .day-five__status-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .day-five__ticket-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .day-five__ticket-card {
+        flex-direction: column;
+        gap: 12px;
+        padding: 18px;
+    }
+
+    .day-five__activity-item {
+        gap: 10px;
+    }
+
+    .day-five__detail-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .day-five__detail-actions {
+        gap: 8px;
+    }
+
+    .day-five__detail-actions>button {
+        flex: 1 1 auto;
+    }
+
+    .day-five__block-panel>div {
+        flex-wrap: wrap;
+    }
+
+    .day-five__block-panel button {
+        flex: 1 1 auto;
+    }
+
+    .day-five__history-meta {
+        flex-wrap: wrap;
+    }
+}
