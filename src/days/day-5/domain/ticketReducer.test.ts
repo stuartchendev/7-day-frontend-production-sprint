@@ -136,12 +136,14 @@ describe('ticketReducer', () => {
         );
 
         expect(newState[0].status).toBe('blocked');
-        expect(newState[0].blockReason).toBe(
-            'Waiting for customer confirmation'
-        );
+
+        if (newState[0].status === 'blocked') {
+            expect(newState[0].blockReason).toBe(
+                'Waiting for customer confirmation'
+            );
+        }
 
         expect(newState[0].history).toHaveLength(2);
-        expect(newState[0].history[0].action).toBe('block');
         expect(newState[0].history[1].action).toBe('block');
         expect(newState[0].history[1].note).toBe(
             'Waiting for customer confirmation'

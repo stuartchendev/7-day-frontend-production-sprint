@@ -1,42 +1,28 @@
 import { useReducer, useState } from "react";
-import type { Ticket, TicketAction } from "./type";
+import type { Ticket, TicketAction, TicketHistoryEntry } from "./type";
 import { ticketTransitions } from "./type";
 import { Link } from "react-router-dom";
 import { initialTickets, statuses } from "./tickets";
-import './day-five.css'
 import { ticketReducer } from "./domain/ticketReducer";
+import { getRecentActivity } from "./domain/recentlyActivity";
+import './day-five.css'
 
-const recentActivity = [
-    {
-        id: 'activity-1',
-        ticketId: 'T-002',
-        action: 'Started processing',
-        timestamp: '10 min ago',
-    },
-    {
-        id: 'activity-2',
-        ticketId: 'T-003',
-        action: 'Ticket blocked',
-        timestamp: '24 min ago',
-    },
-    {
-        id: 'activity-3',
-        ticketId: 'T-004',
-        action: 'Ticket resolved',
-        timestamp: '1 hr ago',
-    },
-    {
-        id: 'activity-4',
-        ticketId: 'T-001',
-        action: 'Ticket assigned',
-        timestamp: '2 hrs ago',
-    },
-];
 function isValidTicketTransition(
     state: Ticket,
     action: TicketAction
 ): boolean {
     return ticketTransitions[state.status].includes(action.type as never);
+}
+
+function getActivityLabel(action: TicketHistoryEntry['action']) {
+    switch (action) {
+        case 'block':
+            return 'Ticket blocked';
+        case 'resume':
+            return 'Ticket resumed';
+        case 'resolve':
+            return 'Ticket resolved';
+    }
 }
 
 export function DayFivePage() {
@@ -52,6 +38,8 @@ export function DayFivePage() {
 
     const [isBlocking, setIsBlocking] = useState(false);
     const [blockReason, setBlockReason] = useState('');
+
+    const recentActivity = getRecentActivity(tickets);
 
     const filteredTickets =
         selectedStatus === 'all'
@@ -362,7 +350,7 @@ export function DayFivePage() {
                     )}
                     <section className="day-five__activity">
                         <div className="day-five__activity-heading">
-                            <p className="day-five__eyebrow">History Activity</p>
+                            <p className="day-five__eyebrow">Recent Activity</p>
                             <h2>Maintenance requests</h2>
                         </div>
                         <div className="day-five__activity-list">
@@ -370,7 +358,7 @@ export function DayFivePage() {
                                 <div className="day-five__activity-item" key={activity.id}>
                                     <div>
                                         <strong>{activity.ticketId}</strong>
-                                        <p>{activity.action}</p>
+                                        <p>{getActivityLabel(activity.action)}</p>
                                     </div>
 
                                     <time>{activity.timestamp}</time>
