@@ -2,6 +2,7 @@ import { DayOnePage } from './day-1/DayOnePage'
 import { DayTwoPage } from './day-2/DayTwoPage'
 import { DayThreePage } from './day-3/DayThreePage'
 import { DayFourPage } from './day-4/DayFourPage'
+import { DayFivePage } from './day-5/DayFivePage'
 import type { SprintDay } from './types'
 
 /**
@@ -40,5 +41,13 @@ export const sprintDays: SprintDay[] = [
     summary: 'A booking flow handles availability, temporary failures, and reservation conflicts.',
     publishedOn: '2026-08-27',
     Component: DayFourPage,
+  },
+  {
+    day: 5,
+    slug: 'day-5',
+    title: 'Maintenance Ticket Workflow',
+    summary: 'Explicit ticket states drive valid actions, derived views, and persistent workflow history.',
+    publishedOn: '2026-09-08',
+    Component: DayFivePage,
   },
 ]
