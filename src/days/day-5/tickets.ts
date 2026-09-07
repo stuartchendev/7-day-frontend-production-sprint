@@ -44,7 +44,6 @@ export const initialTickets: Ticket[] = [
                 id: 'T-004',
                 action: 'resolve',
                 timestamp: '2026-09-05T11:30:00Z',
-                note: 'Ticket assigned to maintenance team',
             },
         ],
     },
