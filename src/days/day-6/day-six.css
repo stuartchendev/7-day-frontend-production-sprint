@@ -1,0 +1,24 @@
+.day-six {
+    width: min(1320px, calc(100% - 40px));
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 48px 0 96px;
+
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 40px;
+}
+.day-six h1 {
+    font-size: 5rem;
+}
+.day-six__workspace{
+    display: flex;
+}
+
+.day-six__workspace > section:first-child {
+    flex: 3;
+}
+
+.day-six__workspace > section:last-child {
+    flex: 1;
+}
