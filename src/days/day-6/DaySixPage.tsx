@@ -1,10 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { UploadStatus } from "./types";
 import { Link } from "react-router-dom";
 import './day-six.css'
 
 export function DaySixPage(){
     const [status, setStatus] = useState<UploadStatus>('idle');
+    const [selectedFile, setSelectedFile] = useState<File|null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string|null>(null);
+    const [imageDimensions, setImageDimensions] = useState<{
+        width: number;
+        height: number;
+    } | null>(null);
+    function handleFileChange(event: React.ChangeEvent<HTMLInputElement>){
+        const file = event.target.files?.[0] ?? null;
+
+        setSelectedFile(file);
+    }
+
+    function handleClear() {
+        setSelectedFile(null);
+    }
+    // for preview url
+    useEffect(() => {
+        if (!selectedFile) {
+            setPreviewUrl(null);
+            return;
+        }
+
+        const url = URL.createObjectURL(selectedFile);
+        setPreviewUrl(url);
+
+        return () => {
+            URL.revokeObjectURL(url);
+        };
+    }, [selectedFile]);
+    
+    // for image width/height
+    useEffect(()=>{
+        if(!previewUrl){
+            setImageDimensions(null);
+            return;
+        }
+        const image = new Image();
+
+        image.onload = () => {
+            setImageDimensions({
+                width: image.naturalWidth,
+                height: image.naturalHeight,
+            })
+        }
+
+        image.src = previewUrl;
+    }, [previewUrl])
+
 return (
     <main className="day-six">
         <div className="day-six__intro">
@@ -31,6 +79,18 @@ return (
 
                 <p>Current status: {status}</p>
 
+                <input
+                    type="file"
+                    accept="image/"
+                    onChange={handleFileChange}
+                />
+                <button type="button" onClick={()=>handleClear()}>clear image</button>
+                {previewUrl && (
+                    <img 
+                        src={previewUrl}
+                        alt="Selected preview"
+                    />
+                )}
                 {status === "idle" &&
                     <p>This is idle UI.</p>
                 }
@@ -80,12 +140,14 @@ return (
 
             <section>
                 <h2>Asset Info / Actions</h2>
-
-                <p>File name</p>
-                <p>File type</p>
-                <p>File size</p>
-                <p>Dimensions</p>
-
+                {selectedFile && (
+                    <div>
+                        <p>{selectedFile.name}</p>
+                        <p>{selectedFile.type}</p>
+                        <p>{selectedFile.size} bytes</p>
+                        <p>Dimensions: {imageDimensions?.width} x {imageDimensions?.height} px</p>
+                    </div>
+                )}
                 <button type="button">
                     Upload
                 </button>
