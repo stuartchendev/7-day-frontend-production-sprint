@@ -17,3 +17,11 @@ export type UploadOptions = {
   onProgress?: (progress: number) => void;
   shouldFail?: boolean;
 };
+
+export type UploadInput = {
+    file: File;
+    dimensions: {
+        width: number;
+        height: number;
+    };
+};

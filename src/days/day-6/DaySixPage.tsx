@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import type { UploadStatus } from "./types";
+import type { UploadedAsset, UploadStatus } from "./types";
+import { UploadAsset } from "./uploadAsset";
 import { Link } from "react-router-dom";
 import './day-six.css'
+import { should } from "vitest";
 
 export function DaySixPage(){
     const [status, setStatus] = useState<UploadStatus>('idle');
@@ -11,6 +13,9 @@ export function DaySixPage(){
         width: number;
         height: number;
     } | null>(null);
+    const [progress, setProgress] = useState(0);
+    const [UploadedAsset, setUploadedAsset] = useState<UploadedAsset|null>(null);
+    const [hasFailedOnce, setHasFailedOnce] = useState(false);
     function handleFileChange(event: React.ChangeEvent<HTMLInputElement>){
         const file = event.target.files?.[0] ?? null;
 
@@ -52,6 +57,32 @@ export function DaySixPage(){
 
         image.src = previewUrl;
     }, [previewUrl])
+
+    async function handleUpload(){
+        if(!selectedFile || !imageDimensions){
+            return;
+        }
+
+        setStatus("loading");
+        setProgress(0);
+        try{
+            const result = await UploadAsset(
+                {
+                    file: selectedFile,
+                    dimensions: imageDimensions,
+                },
+                {
+                    onProgress: setProgress,
+                    shouldFail: !hasFailedOnce,
+                },
+            )
+            setUploadedAsset(result);
+            setStatus("success");
+        } catch(error) {
+            setHasFailedOnce(true);
+            setStatus("failed");
+        }
+    }
 
 return (
     <main className="day-six">
@@ -96,7 +127,7 @@ return (
                 }
 
                 {status === "loading" &&
-                    <p>This is loading UI.</p>
+                    <p>This is loading UI.{progress}</p>
                 }
 
                 {status === "success" &&
@@ -104,7 +135,16 @@ return (
                 }
 
                 {status === "failed" &&
-                    <p>This is failed UI.</p>
+                (   
+                    <div>                 
+                        <p>This is failed UI.</p>
+                        <button 
+                            type="button" 
+                            onClick={handleUpload}>
+                            Retry
+                        </button>
+                    </div>
+                )
                 }
 
                 <div>
@@ -148,7 +188,11 @@ return (
                         <p>Dimensions: {imageDimensions?.width} x {imageDimensions?.height} px</p>
                     </div>
                 )}
-                <button type="button">
+                <button 
+                    type="button"
+                    onClick={handleUpload}
+                    disabled={!selectedFile||!imageDimensions || status === "loading"}
+                    >
                     Upload
                 </button>
             </section>
