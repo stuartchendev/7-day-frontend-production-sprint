@@ -120,8 +120,13 @@ export function DaySixPage() {
                         type="file"
                         accept="image/"
                         onChange={handleFileChange}
+                        disabled={status === "loading"}
                     />
-                    <button type="button" onClick={() => handleClear()}>clear image</button>
+                    <button
+                        type="button"
+                        onClick={() => handleClear()}
+                        disabled={status === "loading"}
+                    >clear image</button>
                     {previewUrl && (
                         <img
                             src={previewUrl}
@@ -197,7 +202,11 @@ export function DaySixPage() {
                     <button
                         type="button"
                         onClick={handleUpload}
-                        disabled={!selectedFile || !imageDimensions || status === "loading"}
+                        disabled={
+                            !selectedFile ||
+                            !imageDimensions ||
+                            status === "loading" ||
+                            status === "failed"}
                     >
                         Upload
                     </button>

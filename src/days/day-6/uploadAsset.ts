@@ -1,7 +1,7 @@
 import type { UploadInput, UploadOptions, UploadedAsset } from "./types";
 
-function wait(ms:number){
-    return new Promise((resolve)=>{
+function wait(ms: number) {
+    return new Promise((resolve) => {
         setTimeout(resolve, ms)
     })
 }
@@ -9,18 +9,16 @@ function wait(ms:number){
 export async function UploadAsset(
     input: UploadInput,
     options?: UploadOptions,
-):Promise<UploadedAsset>{
-    const { file, dimensions }= input;
+): Promise<UploadedAsset> {
+    const { file, dimensions } = input;
 
     options?.onProgress?.(0);
-
-    if (options?.shouldFail) {
-        throw new Error("Simulated upload failure");
-    }
-
     await wait(300);
 
     options?.onProgress?.(30);
+    if (options?.shouldFail) {
+        throw new Error("Simulated upload failure");
+    }
     await wait(300);
 
     options?.onProgress?.(70);
@@ -28,7 +26,7 @@ export async function UploadAsset(
 
     options?.onProgress?.(100);
 
-    return{
+    return {
         id: crypto.randomUUID(),
         name: file.name,
         type: file.type,
