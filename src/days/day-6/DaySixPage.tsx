@@ -13,7 +13,7 @@ export function DaySixPage() {
         height: number;
     } | null>(null);
     const [progress, setProgress] = useState(0);
-    const [UploadedAsset, setUploadedAsset] = useState<UploadedAsset | null>(null);
+    const [uploadedAsset, setUploadedAsset] = useState<UploadedAsset | null>(null);
     const [hasFailedOnce, setHasFailedOnce] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -107,89 +107,62 @@ export function DaySixPage() {
                         A small creator asset workflow with local preview,
                         async upload progress, and explicit failure recovery.
                     </p>
+                    <p>Current status: {status}</p>
                 </header>
             </div>
             <div className="day-six__workspace">
-                <section>
+                <section className="day-six__panel-preview">
                     <h2>Preview / Lifecycle</h2>
+                    <div className="day-six__upload-area">
+                        <label className="day-six__upload-surface">
+                            {!previewUrl && (
+                                <div className="day-six__upload-placeholder">
+                                    <div className="day-six__upload-empty">
+                                        <strong>Upload an image</strong>
+                                        <span>Drop an image here or click to browse.</span>
+                                    </div>
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleFileChange}
+                                        disabled={status === "loading"}
+                                    />
+                                </div>
+                            )}
 
-                    <p>Current status: {status}</p>
-
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/"
-                        onChange={handleFileChange}
-                        disabled={status === "loading"}
-                    />
-                    <button
-                        type="button"
-                        onClick={() => handleClear()}
-                        disabled={status === "loading"}
-                    >clear image</button>
-                    {previewUrl && (
-                        <img
-                            src={previewUrl}
-                            alt="Selected preview"
-                        />
-                    )}
-                    {status === "idle" &&
-                        <p>This is idle UI.</p>
-                    }
-
-                    {status === "loading" &&
-                        <p>This is loading UI.{progress}</p>
-                    }
-
-                    {status === "success" &&
-                        <p>This is success UI.</p>
-                    }
-
-                    {status === "failed" &&
-                        (
-                            <div>
-                                <p>This is failed UI.</p>
-                                <button
-                                    type="button"
-                                    onClick={handleUpload}>
-                                    Retry
-                                </button>
-                            </div>
-                        )
-                    }
-
-                    <div>
-                        <button
-                            type="button"
-                            onClick={() => setStatus("idle")}
-                        >
-                            idle
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setStatus("loading")}
-                        >
-                            loading
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setStatus("success")}
-                        >
-                            success
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => setStatus("failed")}
-                        >
-                            failed
-                        </button>
+                            {previewUrl && (
+                                <img
+                                    className="day-six__preview"
+                                    src={previewUrl}
+                                    alt="Selected preview"
+                                />
+                            )}
+                        </label>
+                        <div className="day-six__status">
+                            {status === "loading" &&
+                                 <p>This is loading UI.{progress}</p>
+                            }
+                            {status === "success" && (
+                                 <p>Upload complete.</p>
+                            )}
+                            {status === "failed" &&
+                                        (
+                                            <div>
+                                                <p>This is failed UI.</p>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleUpload}>
+                                                    Retry
+                                                </button>
+                                            </div>
+                                        )
+                            }
+                        </div>
                     </div>
                 </section>
 
-                <section>
+                <section className="day-six__panel-info">
                     <h2>Asset Info / Actions</h2>
                     {selectedFile && (
                         <div>
@@ -210,6 +183,11 @@ export function DaySixPage() {
                     >
                         Upload
                     </button>
+                    <button
+                        type="button"
+                        onClick={() => handleClear()}
+                        disabled={status === "loading"}
+                    >clear image</button>
                 </section>
             </div>
         </main>
