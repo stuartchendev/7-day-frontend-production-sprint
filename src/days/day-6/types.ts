@@ -19,9 +19,14 @@ export type UploadOptions = {
 };
 
 export type UploadInput = {
-    file: File;
-    dimensions: {
-        width: number;
-        height: number;
-    };
+  file: File;
+  dimensions: {
+    width: number;
+    height: number;
+  };
+};
+
+export type ImageDimensions = {
+  width: number;
+  height: number;
 };

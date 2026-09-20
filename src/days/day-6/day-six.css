@@ -31,18 +31,20 @@
 
 .day-six__workspace {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(240px, 1fr);
+    grid-template-columns: minmax(0, 3fr) minmax(300px, 1fr);
     gap: 24px;
 }
 
-
+/* asset info panel */
 .day-six__panel-info {
     min-height: 520px;
     padding: 24px;
 
+    display: flex;
+    flex-direction: column;
+
     border: 1px solid #cfd5cc;
     border-radius: 16px;
-
     background: rgba(255, 255, 255, 0.72);
 }
 
@@ -50,6 +52,12 @@
     display: flex;
     flex-direction: column;
 }
+
+.day-six__actions {
+    margin-top: auto;
+}
+
+/* preview panel */
 
 .day-six__upload-surface {
     position: relative;

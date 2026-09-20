@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import type { UploadedAsset, UploadStatus } from "./types";
+import type { UploadedAsset, UploadStatus, ImageDimensions } from "./types";
 import { UploadAsset } from "./uploadAsset";
 import { Link } from "react-router-dom";
 import './day-six.css'
@@ -8,15 +8,12 @@ export function DaySixPage() {
     const [status, setStatus] = useState<UploadStatus>('idle');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const [imageDimensions, setImageDimensions] = useState<{
-        width: number;
-        height: number;
-    } | null>(null);
+    const [imageDimensions, setImageDimensions] = useState<ImageDimensions | null>(null);
     const [progress, setProgress] = useState(0);
     const [uploadedAsset, setUploadedAsset] = useState<UploadedAsset | null>(null);
     const [hasFailedOnce, setHasFailedOnce] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
-
+    const BYTES_PER_UNIT = 1024;
     function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0] ?? null;
 
@@ -91,6 +88,51 @@ export function DaySixPage() {
         }
     }
 
+    function formatFileType(type: string) {
+        if (!type) {
+            return "Unknown";
+        }
+        const [_, subType] = type.split("/");
+        if (!subType) {
+            return type;
+        }
+        return `${subType.toUpperCase()} image`;
+    }
+
+    function formatFileSize(size: number) {
+        if (size < BYTES_PER_UNIT) {
+            return `${size} B`;
+        }
+
+        const kb = size / BYTES_PER_UNIT
+
+        if (kb < BYTES_PER_UNIT) {
+            return `${kb.toFixed(2)} KB`;
+        }
+
+        const mb = kb / BYTES_PER_UNIT
+
+        if (mb < BYTES_PER_UNIT) {
+            return `${mb.toFixed(2)} MB`;
+        }
+
+        const gb = mb / BYTES_PER_UNIT
+
+        if (gb < BYTES_PER_UNIT) {
+            return `${gb.toFixed(2)} GB`;
+        }
+
+
+    }
+
+    function formatDimensions(dimensions: ImageDimensions | null) {
+        if (!dimensions) {
+            return "Unknown";
+        }
+
+        return `${dimensions.width} x ${dimensions.height} px`;
+    }
+
     return (
         <main className="day-six">
             <div className="day-six__intro">
@@ -109,7 +151,6 @@ export function DaySixPage() {
                         A small creator asset workflow with local preview,
                         async upload progress, and explicit failure recovery.
                     </p>
-                    <p>Current status: {status}</p>
                 </header>
             </div>
             <div className="day-six__workspace">
@@ -166,41 +207,81 @@ export function DaySixPage() {
 
                 <section className="day-six__panel-info">
                     <h2>Asset Info / Actions</h2>
-                    {selectedFile && (
-                        <div>
-                            <p>{selectedFile.name}</p>
-                            <p>{selectedFile.type}</p>
-                            <p>{selectedFile.size} bytes</p>
-                            <p>Dimensions: {imageDimensions?.width} x {imageDimensions?.height} px</p>
-                        </div>
-                    )}
-                    <button
-                        type="button"
-                        onClick={handleUpload}
-                        disabled={
-                            !selectedFile ||
-                            !imageDimensions ||
-                            status === "loading" ||
-                            status === "failed"}
-                    >
-                        Upload
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => handleClear()}
-                        disabled={status === "loading"}
-                    >clear image</button>
-                    {status === "failed" &&
-                        (
+
+                    <div className="day-six__status-info">
+                        <span>STATUS</span>
+                        {status === "idle" && (
+                            <p>No image selected</p>
+                        )}
+
+                        {status === "loading" && (
+                            <p>Uploading…</p>
+                        )}
+
+                        {status === "success" && uploadedAsset && (
+                            <>
+                                <p>Upload complete</p>
+                                <p>Name: {uploadedAsset.name}</p>
+                                <p>ID: {uploadedAsset.id}</p>
+                            </>
+                        )}
+
+                        {status === "failed" && (
+                            <p>Upload failed. You can retry this upload.</p>
+                        )}
+                    </div>
+
+                    <div className="day-six__asset-info">
+                        {!selectedFile && (
+                            <p>
+                                Choose an image to preview and upload.
+                            </p>
+                        )}
+
+                        {selectedFile && (
+                            <div className="day-six__asset-metadata">
+                                <span>TEMPORARY ASSET</span>
+
+                                <p>{selectedFile.name}</p>
+                                <p>{formatFileType(selectedFile.type)}</p>
+                                <p>{formatFileSize(selectedFile.size)}</p>
+                                <p>{formatDimensions(imageDimensions)}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="day-six__actions">
+                        {status === "idle" && (
                             <button
                                 type="button"
-                                onClick={handleUpload}>
+                                onClick={handleUpload}
+                                disabled={!selectedFile || !imageDimensions}
+                            >
+                                Upload
+                            </button>
+                        )}
+
+                        {status === "failed" && (
+                            <button
+                                type="button"
+                                onClick={handleUpload}
+                            >
                                 Retry
                             </button>
-                        )
-                    }
+                        )}
+
+                        {(status === "success" || status === "failed") && (
+                            <button
+                                type="button"
+                                onClick={handleClear}
+                            >
+                                Reset
+                            </button>
+                        )}
+
+                    </div>
                 </section>
             </div>
-        </main>
+        </main >
     );
 }
