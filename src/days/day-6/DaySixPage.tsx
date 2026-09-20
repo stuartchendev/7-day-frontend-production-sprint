@@ -29,6 +29,8 @@ export function DaySixPage() {
         if (fileInputRef.current) {
             fileInputRef.current.value = ""
         }
+        setStatus('idle');
+        setProgress(0);
     }
     // for preview url
     useEffect(() => {
@@ -138,27 +140,27 @@ export function DaySixPage() {
                                     alt="Selected preview"
                                 />
                             )}
+                            <div className={`day-six__status ${status}`}>
+                                {status === "loading" && (
+                                    <div
+                                        className="day-six__progress"
+                                        style={{ width: `${progress}%` }}
+                                    />
+                                )}
+
+                                {status === "success" && (
+                                    <div className="day-six__result" aria-hidden="true">
+                                        ✓
+                                    </div>
+                                )}
+
+                                {status === "failed" && (
+                                    <div className="day-six__result" aria-hidden="true">
+                                        ×
+                                    </div>
+                                )}
+                            </div>
                         </label>
-                        <div className="day-six__status">
-                            {status === "loading" &&
-                                 <p>This is loading UI.{progress}</p>
-                            }
-                            {status === "success" && (
-                                 <p>Upload complete.</p>
-                            )}
-                            {status === "failed" &&
-                                        (
-                                            <div>
-                                                <p>This is failed UI.</p>
-                                                <button
-                                                    type="button"
-                                                    onClick={handleUpload}>
-                                                    Retry
-                                                </button>
-                                            </div>
-                                        )
-                            }
-                        </div>
                     </div>
                 </section>
 
@@ -188,6 +190,15 @@ export function DaySixPage() {
                         onClick={() => handleClear()}
                         disabled={status === "loading"}
                     >clear image</button>
+                    {status === "failed" &&
+                        (
+                            <button
+                                type="button"
+                                onClick={handleUpload}>
+                                Retry
+                            </button>
+                        )
+                    }
                 </section>
             </div>
         </main>

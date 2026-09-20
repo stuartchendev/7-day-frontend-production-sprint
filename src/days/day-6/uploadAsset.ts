@@ -16,12 +16,22 @@ export async function UploadAsset(
     await wait(300);
 
     options?.onProgress?.(30);
+    await wait(300);
+
     if (options?.shouldFail) {
         throw new Error("Simulated upload failure");
     }
+
+    options?.onProgress?.(60);
+
     await wait(300);
 
-    options?.onProgress?.(70);
+    options?.onProgress?.(80);
+
+    await wait(300);
+
+    options?.onProgress?.(90);
+
     await wait(300);
 
     options?.onProgress?.(100);

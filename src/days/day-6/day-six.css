@@ -12,9 +12,11 @@
     color: #1d251f;
 
 }
+
 .day-six h1 {
     font-size: 5rem;
 }
+
 .day-six__workspace {
     width: min(1320px, calc(100% - 40px));
     min-height: 480px;
@@ -43,7 +45,8 @@
 
     background: rgba(255, 255, 255, 0.72);
 }
-.day-six__panel-preview{
+
+.day-six__panel-preview {
     display: flex;
     flex-direction: column;
 }
@@ -104,6 +107,7 @@
     position: relative;
     flex: 1;
     min-height: 0;
+    z-index: 1;
 
     display: flex;
     flex-direction: column;
@@ -111,4 +115,54 @@
 
 .day-six__status {
     position: absolute;
+    inset: 0;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: background-color 220ms ease;
+}
+
+.loading {
+    background: rgba(255, 255, 255, 0.82);
+}
+
+.success {
+    background: rgba(201, 223, 208, 0.9);
+}
+
+.failed {
+    background: rgba(232, 199, 194, 0.9);
+}
+
+.day-six__progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+
+    height: 2px;
+    background: #3f654d;
+
+    transition: width 180ms ease;
+}
+
+.day-six__result {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+
+.day-six__status.success .day-six__result {
+    color: #3f654d;
+}
+
+.day-six__status.failed .day-six__result {
+    color: #7d4038;
 }
