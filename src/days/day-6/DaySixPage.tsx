@@ -12,24 +12,52 @@ export function DaySixPage() {
     const [progress, setProgress] = useState(0);
     const [uploadedAsset, setUploadedAsset] = useState<UploadedAsset | null>(null);
     const [hasFailedOnce, setHasFailedOnce] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const BYTES_PER_UNIT = 1024;
+
+    function handleFileSelect(file: File) {
+        setSelectedFile(file);
+        setUploadedAsset(null);
+        setStatus("idle");
+        setProgress(0);
+    }
+
     function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0] ?? null;
 
-        setSelectedFile(file);
+        if (!file) return;
+
+        handleFileSelect(file);
     }
+
+    function handleDrop(event: React.DragEvent<HTMLDivElement>) {
+        event.preventDefault();
+
+        if (status !== "idle") return;
+
+        setIsDragging(false);
+
+        const file = event.dataTransfer.files?.[0];
+
+        if (!file) return;
+
+        handleFileSelect(file);
+    }
+
 
     function handleReset() {
         setSelectedFile(null);
         setUploadedAsset(null);
         setHasFailedOnce(false);
 
+        setStatus('idle');
+        setProgress(0);
+        setIsDragging(false);
+
         if (fileInputRef.current) {
             fileInputRef.current.value = ""
         }
-        setStatus('idle');
-        setProgress(0);
     }
     // for preview url
     useEffect(() => {
@@ -159,13 +187,32 @@ export function DaySixPage() {
                 <section className="day-six__panel-preview">
                     <h2>Preview / Lifecycle</h2>
                     <div className="day-six__upload-area">
-                        <label className="day-six__upload-surface">
-                            {!previewUrl && (
-                                <div className="day-six__upload-placeholder">
+                        <div
+                            className="day-six__upload-surface"
+                            onDragEnter={() => {
+                                if (status !== "idle") return;
+                                setIsDragging(true);
+                            }}
+
+                            onDragOver={(event) => {
+                                event.preventDefault();
+
+                                if (status !== "idle") return;
+                                setIsDragging(true);
+                            }}
+
+                            onDragLeave={() => {
+                                setIsDragging(false);
+                            }}
+                            onDrop={handleDrop}
+                        >
+                            {!previewUrl && !isDragging && (
+                                <label className="day-six__upload-placeholder">
                                     <div className="day-six__upload-empty">
                                         <strong>Upload an image</strong>
                                         <span>Drop an image here or click to browse.</span>
                                     </div>
+
                                     <input
                                         ref={fileInputRef}
                                         type="file"
@@ -173,7 +220,7 @@ export function DaySixPage() {
                                         onChange={handleFileChange}
                                         disabled={status === "loading"}
                                     />
-                                </div>
+                                </label>
                             )}
 
                             {previewUrl && (
@@ -182,6 +229,22 @@ export function DaySixPage() {
                                     src={previewUrl}
                                     alt="Selected preview"
                                 />
+                            )}
+
+                            {isDragging && status === "idle" && (
+                                <div className="day-six__drag-overlay">
+                                    <strong>
+                                        {selectedFile
+                                            ? "Drop image to replace"
+                                            : "Drop image here"}
+                                    </strong>
+
+                                    <span>
+                                        {selectedFile
+                                            ? "Release to replace the current image."
+                                            : "Release to select this image."}
+                                    </span>
+                                </div>
                             )}
                             <div className={`day-six__status ${status}`}>
                                 {status === "loading" && (
@@ -203,9 +266,9 @@ export function DaySixPage() {
                                     </div>
                                 )}
                             </div>
-                        </label>
+                        </div>
                     </div>
-                </section>
+                </section >
 
                 <section className="day-six__panel-info">
                     <h2>Asset Info / Actions</h2>
@@ -338,7 +401,7 @@ export function DaySixPage() {
                         )}
                     </div>
                 </section>
-            </div>
+            </div >
         </main >
     );
 }
