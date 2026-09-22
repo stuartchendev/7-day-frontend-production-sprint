@@ -53,10 +53,6 @@
     flex-direction: column;
 }
 
-.day-six__actions {
-    margin-top: auto;
-}
-
 /* preview panel */
 
 .day-six__upload-surface {
@@ -173,4 +169,92 @@
 
 .day-six__status.failed .day-six__result {
     color: #7d4038;
+}
+
+/* status info */
+.day-six__status-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid #cfd5cc;
+}
+
+.day-six__status-label {
+    color: #5d6d62;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.day-six__status-message {
+    margin: 0;
+
+    color: #1d251f;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* asset metadata */
+.day-six__asset-metadata {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    padding-top: 20px
+}
+
+.day-six__metadata-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.day-six__metadata-label {
+    color: #5d6d62;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.day-six__metadata-value {
+    margin: 0;
+
+    color: #1d251f;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+
+/* actions button */
+.day-six__actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.day-six__actions button {
+    min-height: 40px;
+    padding: 0 16px;
+
+    border-radius: 10px;
+
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.day-six__button-primary {
+    border: 1px solid #3f654d;
+    background: #3f654d;
+    color: #ffffff;
+}
+
+.day-six__button-secondary {
+    border: 1px solid #cfd5cc;
+    background: rgba(255, 255, 255, 0.72);
+    color: #1d251f;
 }

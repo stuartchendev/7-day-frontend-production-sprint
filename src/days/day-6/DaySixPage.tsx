@@ -20,7 +20,7 @@ export function DaySixPage() {
         setSelectedFile(file);
     }
 
-    function handleClear() {
+    function handleReset() {
         setSelectedFile(null);
 
         if (fileInputRef.current) {
@@ -209,25 +209,38 @@ export function DaySixPage() {
                     <h2>Asset Info / Actions</h2>
 
                     <div className="day-six__status-info">
-                        <span>STATUS</span>
+                        <span className="day-six__status-label">STATUS</span>
+
                         {status === "idle" && (
-                            <p>No image selected</p>
+                            <p className="day-six__status-message">
+                                {selectedFile ? "Ready to upload" : "No image selected"}
+                            </p>
                         )}
 
                         {status === "loading" && (
-                            <p>Uploading…</p>
+                            <p className="day-six__status-message">
+                                Uploading…
+                            </p>
                         )}
 
                         {status === "success" && uploadedAsset && (
                             <>
-                                <p>Upload complete</p>
-                                <p>Name: {uploadedAsset.name}</p>
-                                <p>ID: {uploadedAsset.id}</p>
+                                <p className="day-six__status-message">
+                                    Upload complete
+                                </p>
+                                <p className="day-six__status-message">
+                                    Name: {uploadedAsset.name}
+                                </p>
+                                <p className="day-six__status-message">
+                                    ID: {uploadedAsset.id}
+                                </p>
                             </>
                         )}
 
                         {status === "failed" && (
-                            <p>Upload failed. You can retry this upload.</p>
+                            <p className="day-six__status-message">
+                                Upload failed. You can retry this upload.
+                            </p>
                         )}
                     </div>
 
@@ -240,45 +253,78 @@ export function DaySixPage() {
 
                         {selectedFile && (
                             <div className="day-six__asset-metadata">
-                                <span>TEMPORARY ASSET</span>
+                                <span className="day-six__metadata-label">TEMPORARY ASSET</span>
 
-                                <p>{selectedFile.name}</p>
-                                <p>{formatFileType(selectedFile.type)}</p>
-                                <p>{formatFileSize(selectedFile.size)}</p>
-                                <p>{formatDimensions(imageDimensions)}</p>
+                                <div className="day-six__metadata-item">
+                                    <span className="day-six__metadata-label">NAME</span>
+                                    <p className="day-six__metadata-value">{selectedFile.name}</p>
+                                </div>
+
+                                <div className="day-six__metadata-item">
+                                    <span className="day-six__metadata-label">TYPE</span>
+                                    <p className="day-six__metadata-value">
+                                        {formatFileType(selectedFile.type)}
+                                    </p>
+                                </div>
+
+                                <div className="day-six__metadata-item">
+                                    <span className="day-six__metadata-label">SIZE</span>
+                                    <p className="day-six__metadata-value">
+                                        {formatFileSize(selectedFile.size)}
+                                    </p>
+                                </div>
+
+                                <div className="day-six__metadata-item">
+                                    <span className="day-six__metadata-label">DIMENSIONS</span>
+                                    <p className="day-six__metadata-value">
+                                        {formatDimensions(imageDimensions)}
+                                    </p>
+                                </div>
                             </div>
                         )}
                     </div>
 
                     <div className="day-six__actions">
-                        {status === "idle" && (
+                        {status === "idle" && selectedFile && (
                             <button
                                 type="button"
+                                className="day-six__button-primary"
                                 onClick={handleUpload}
-                                disabled={!selectedFile || !imageDimensions}
                             >
                                 Upload
                             </button>
+
                         )}
 
                         {status === "failed" && (
-                            <button
-                                type="button"
-                                onClick={handleUpload}
-                            >
-                                Retry
-                            </button>
+                            <>
+                                <button
+                                    type="button"
+                                    className="day-six__button-primary"
+                                    onClick={handleUpload}
+                                >
+                                    Retry
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="day-six__button-secondary"
+                                    onClick={handleReset}
+                                >
+                                    Reset
+                                </button>
+                            </>
                         )}
 
-                        {(status === "success" || status === "failed") && (
+                        {status === "success" && (   
                             <button
                                 type="button"
-                                onClick={handleClear}
+                                className="day-six__button-secondary"
+                                onClick={handleReset}
                             >
                                 Reset
                             </button>
                         )}
-
                     </div>
                 </section>
             </div>
