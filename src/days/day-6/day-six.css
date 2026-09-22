@@ -8,7 +8,6 @@
     grid-template-columns: 280px minmax(0, 1fr);
     gap: 40px;
 
-    background: #f4f6f3;
     color: #1d251f;
 
 }
@@ -185,6 +184,53 @@
     color: #1d251f;
     font-size: 0.95rem;
     line-height: 1.4;
+}
+
+.day-six__status-result {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.day-six__status-result-label {
+    color: #5d6d62;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.day-six__status-result-value {
+    max-width: 100%;
+
+    color: #1d251f;
+    font-size: 0.95rem;
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
+}
+
+.day-six__status-result-id {
+    width: fit-content;
+    max-width: 100%;
+    padding: 4px 8px;
+
+    border: 1px solid #cfd5cc;
+    border-radius: 6px;
+
+    background: rgba(255, 255, 255, 0.72);
+    color: #59645c;
+
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+    font-size: 0.72rem;
+    line-height: 1.4;
+
+    overflow-wrap: anywhere;
 }
 
 /* asset metadata */

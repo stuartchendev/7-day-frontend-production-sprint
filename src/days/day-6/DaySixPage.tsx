@@ -22,6 +22,8 @@ export function DaySixPage() {
 
     function handleReset() {
         setSelectedFile(null);
+        setUploadedAsset(null);
+        setHasFailedOnce(false);
 
         if (fileInputRef.current) {
             fileInputRef.current.value = ""
@@ -228,12 +230,31 @@ export function DaySixPage() {
                                 <p className="day-six__status-message">
                                     Upload complete
                                 </p>
-                                <p className="day-six__status-message">
-                                    Name: {uploadedAsset.name}
-                                </p>
-                                <p className="day-six__status-message">
-                                    ID: {uploadedAsset.id}
-                                </p>
+                                <div className="day-six__status-result">
+                                    <span className="day-six__status-result-label">
+                                        NAME
+                                    </span>
+
+                                    <span
+                                        className="day-six__status-result-value"
+                                        title={uploadedAsset.name}
+                                    >
+                                        {uploadedAsset.name}
+                                    </span>
+                                </div>
+
+                                <div className="day-six__status-result">
+                                    <span className="day-six__status-result-label">
+                                        ID
+                                    </span>
+
+                                    <span
+                                        className="day-six__status-result-value day-six__status-result-id"
+                                        title={uploadedAsset.id}
+                                    >
+                                        {uploadedAsset.id}
+                                    </span>
+                                </div>
                             </>
                         )}
 
@@ -286,46 +307,27 @@ export function DaySixPage() {
 
                     <div className="day-six__actions">
                         {status === "idle" && selectedFile && (
-                            <>
-                                <button
-                                    type="button"
-                                    className="day-six__button-primary"
-                                    onClick={handleUpload}
-                                >
-                                    Upload
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="day-six__button-secondary"
-                                    onClick={handleReset}
-                                >
-                                    Reset
-                                </button>
-                            </>
+                            <button
+                                type="button"
+                                className="day-six__button-primary"
+                                onClick={handleUpload}
+                            >
+                                Upload
+                            </button>
                         )}
 
                         {status === "failed" && (
-                            <>
-                                <button
-                                    type="button"
-                                    className="day-six__button-primary"
-                                    onClick={handleUpload}
-                                >
-                                    Retry
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className="day-six__button-secondary"
-                                    onClick={handleReset}
-                                >
-                                    Reset
-                                </button>
-                            </>
+                            <button
+                                type="button"
+                                className="day-six__button-primary"
+                                onClick={handleUpload}
+                            >
+                                Retry
+                            </button>
                         )}
 
-                        {status === "success" && (   
+                        {/* need reest button at success/filed/idle+selectedFile */}
+                        {selectedFile && status !== "loading" && (
                             <button
                                 type="button"
                                 className="day-six__button-secondary"
