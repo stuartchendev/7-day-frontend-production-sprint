@@ -286,14 +286,23 @@ export function DaySixPage() {
 
                     <div className="day-six__actions">
                         {status === "idle" && selectedFile && (
-                            <button
-                                type="button"
-                                className="day-six__button-primary"
-                                onClick={handleUpload}
-                            >
-                                Upload
-                            </button>
+                            <>
+                                <button
+                                    type="button"
+                                    className="day-six__button-primary"
+                                    onClick={handleUpload}
+                                >
+                                    Upload
+                                </button>
 
+                                <button
+                                    type="button"
+                                    className="day-six__button-secondary"
+                                    onClick={handleReset}
+                                >
+                                    Reset
+                                </button>
+                            </>
                         )}
 
                         {status === "failed" && (

@@ -19,33 +19,23 @@
 
 .day-six__workspace {
     width: min(1320px, calc(100% - 40px));
-    min-height: 480px;
     margin: 48px auto 0;
     padding: 32px;
 
-    border: 1px solid #cfd5cc;
-    border-radius: 20px;
-
-    background: rgba(255, 255, 255, 0.72);
-}
-
-.day-six__workspace {
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(300px, 1fr);
     gap: 24px;
+
+    align-items: start;
 }
 
 /* asset info panel */
 .day-six__panel-info {
     min-height: 520px;
-    padding: 24px;
+    padding: 0 24px 24px 24px;
 
     display: flex;
     flex-direction: column;
-
-    border: 1px solid #cfd5cc;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.72);
 }
 
 .day-six__panel-preview {
@@ -58,7 +48,7 @@
 .day-six__upload-surface {
     position: relative;
     flex: 1;
-    min-height: 0;
+    min-height: 480px;
     padding: 32px;
 
     display: flex;
@@ -119,6 +109,7 @@
 
 .day-six__status {
     position: absolute;
+    min-height: 480px;
     inset: 0;
     z-index: 2;
 
