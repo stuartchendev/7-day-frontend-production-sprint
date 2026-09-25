@@ -13,7 +13,7 @@ The repository root is the Sprint Index and the single Portfolio entry for the S
 | 3 | [Cart State Skeleton](./src/days/day-3/) | Canonical cart state, intent flow, derived totals, and checkout review |
 | 4 | [Booking & Reservation](./src/days/day-4/) | Availability, reservation conflicts, temporary failures, retry behavior, and state transitions |
 | 5 | [Maintenance Ticket Workflow](./src/days/day-5/) | Typed workflow states, explicit transitions, derived views, and persistent history |
-| 6 | — | Planned |
+| 6 | [Creator Upload Tool](./src/days/day-6/) | Local preview, async progress, failure recovery, retry behavior, and resource cleanup |
 | 7 | — | Final integration / evidence selection |
 
 Live Sprint Demo: https://seven-day-frontend-sprint.spu76611.chatgpt.site
@@ -38,16 +38,16 @@ npm run build
 The registry is the single source for both the Sprint Index card and the `/day-N` route.
 
 ```tsx
-import { DayFivePage } from './day-5/DayFivePage'
+import { DaySixPage } from './day-6/DaySixPage'
 
 export const sprintDays: SprintDay[] = [
   {
-    day: 5,
-    slug: 'day-5',
-    title: 'Maintenance Ticket Workflow',
-    summary: 'Explicit ticket states drive valid actions, derived views, and persistent workflow history.',
-    publishedOn: '2026-09-08',
-    Component: DayFivePage,
+    day: 6,
+    slug: 'day-6',
+    title: 'Creator Upload Tool',
+    summary: 'A creator upload workflow handles local preview, async progress, failure recovery, and retry.',
+    publishedOn: '2026-09-25',
+    Component: DaySixPage,
   },
 ]
 ```
