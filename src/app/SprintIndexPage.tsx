@@ -6,7 +6,7 @@ type SprintIndexPageProps = {
 }
 
 export function SprintIndexPage({ days }: SprintIndexPageProps) {
-  const publishedDays = [...days].sort((a, b) => a.day - b.day)
+  const publishedDays = [...days].sort((a, b) => b.day - a.day)
 
   return (
     <main className="sprint-index">

@@ -3,6 +3,7 @@ import { DayTwoPage } from './day-2/DayTwoPage'
 import { DayThreePage } from './day-3/DayThreePage'
 import { DayFourPage } from './day-4/DayFourPage'
 import { DayFivePage } from './day-5/DayFivePage'
+import { DaySixPage } from './day-6/DaySixPage'
 import type { SprintDay } from './types'
 
 /**
@@ -49,5 +50,13 @@ export const sprintDays: SprintDay[] = [
     summary: 'Explicit ticket states drive valid actions, derived views, and persistent workflow history.',
     publishedOn: '2026-09-08',
     Component: DayFivePage,
+  },
+  {
+    day: 6,
+    slug: 'day-6',
+    title: 'Creator Upload Tool',
+    summary: 'A creator upload workflow handles local preview, async progress, failure recovery, and retry.',
+    publishedOn: '2026-09-25',
+    Component: DaySixPage,
   },
 ]
