@@ -316,3 +316,24 @@
     background: rgba(255, 255, 255, 0.72);
     color: #1d251f;
 }
+
+@media (max-width: 900px) {
+    .day-six {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .day-six__workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .day-six__actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .day-six__workspace {
+        min-width: 280px;
+    }
+}
